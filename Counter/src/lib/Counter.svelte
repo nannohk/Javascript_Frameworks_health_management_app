@@ -5,6 +5,8 @@
   }
 </script>
 
-<button on:click={increment}>
-  count is {count}
-</button>
+<div>
+  <button on:click={increment}>Click Me</button>
+<p id="clickedNum">You have clicked the button {count} times.</p>
+</div>
+
