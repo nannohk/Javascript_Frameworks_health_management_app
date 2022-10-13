@@ -1,16 +1,16 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import Counter from './counter';
 
-function App() {
-  return (
-    <div className="App">
-          <h1>Please press the button below</h1>
-    <button id="btn">Click Me</button>
-    <div>
-        <p id="clickedNum">You clicked the button 0 times</p>
-    </div>
-    </div>
-  );
+class App extends Component{
+  render() {
+    return (
+      <div className="App">
+            <h1>Please press the button below</h1>
+      <Counter />
+      </div>
+    );
+  }
 }
 
 export default App;
