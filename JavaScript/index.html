@@ -5,14 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Click Counter</title>
-    
+       <script src="script.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 </head>
+
 <body>  
-    <h1>Please press the button below</h1>
-    <button id="btn">Click Me</button>
-    <div>
-        <p id="clickedNum">You clicked the button 0 times</p>
+    <div id="app">
+        <h1>Please press the button below</h1>
+        <button @click="counter++">Click Me</button>
+        <div>
+            <p id="clickedNum">You have clicked the button {{counter}} times.</p>
+        </div>
     </div>
-    <script src="script.js"></script>
 </body>
+
+<script>
+        var app = new Vue({
+        el: '#app',
+        data: {
+            counter: 0
+        }
+    })
+</script>
 </html>
