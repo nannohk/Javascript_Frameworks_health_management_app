@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Counter';
+  data = "Hello World";
+  num = 0;
+  counting(){
+    this.num++;
+  }
 }
