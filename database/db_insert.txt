@@ -1,6 +1,6 @@
 BEGIN;
-insert into user (id,email,password) values ('1','john@gmail.com','123456');
-insert into user (id,email,password) values ('2','jane@aol.com','notasecret');
-insert into user (id,email,password) values ('3','tom@yahoo.com','jerry');
-insert into user (id,email,password) values ('4','mary@outlook.com','password');
+insert into user (email,password) values ('john@gmail.com','123456');
+insert into user (email,password) values ('jane@aol.com','notasecret');
+insert into user (email,password) values ('tom@yahoo.com','jerry');
+insert into user (email,password) values ('mary@outlook.com','password');
 COMMIT;
