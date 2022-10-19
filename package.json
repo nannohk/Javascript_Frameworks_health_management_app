@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "@capacitor-community/sqlite": "^4.2.2",
     "bootstrap": "^5.2.2"
+  },
+  "devDependencies": {
+    "vue-sqlite-hook": "^3.0.3"
   }
 }
