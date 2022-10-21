@@ -5,7 +5,6 @@ const routes = [
     {path:'/login-page', component: Login}
 ];
 
-
 const router = createRouter({
     history: createWebHistory(),
     routes

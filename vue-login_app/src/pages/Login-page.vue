@@ -36,9 +36,9 @@ export default {
         submitLogin(){
             //check if the password does not contain a * character
             //check if the email and password exist in the database
-            
             console.log(this.email, this.password)
         }
     }
+
 }
 </script>
