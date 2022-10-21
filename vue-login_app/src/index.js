@@ -1,7 +1,7 @@
-import { data } from 'Login-page.vue'
+// import { data } from 'Login-page.vue'
 
-const email = data().email;
-const password = data().password;
+// const email = data().email;
+// const password = data().password;
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./database/vue_pj.db',sqlite3.OPEN_READWRITE, (err) => {
     if (err) return console.error(err.message);
@@ -9,18 +9,23 @@ const db = new sqlite3.Database('./database/vue_pj.db',sqlite3.OPEN_READWRITE, (
     console.log('Connected to the SQlite database.');
 });
 
+const sql = `INSERT INTO users (email, password) VALUES(?,?)`;
 
-db.all(`SELECT email, password FROM users where email=${email} AND password=${password};`, [], (err, rows) => {
+db.run(sql, ['john@yahoo.com','pass1234'],
+ function(err){
     if (err) return console.error(err.message);
-    rows.forEach((row) => {
-        console.log(row);
-    });
+    console.log(`A row has been inserted with rowid ${this.lastID}`);
 });
+// db.all(`SELECT email, password FROM users where email=${email} AND password=${password};`, [], (err, rows) => {
+//     if (err) return console.error(err.message);
+//     rows.forEach((row) => {
+//         console.log(row);
+//     });
+// });
 
 db.close((err) => {
     if (err) return console.error(err.message);
 });
-
 
 // db.run('CREATE TABLE users (email Varchar2(100), password Varchar2(100))');
 
