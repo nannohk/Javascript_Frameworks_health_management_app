@@ -9,12 +9,19 @@
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" class="form-control" placeholder="Enter email" v-model="email">
+
+                </div>
+                <div class="error text-danger" v-if="this.errMail">
+                    {{ this.errMail }}
                 </div>
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" class="form-control" placeholder="Enter password" v-model="password">
-                </div>
 
+                </div>
+                <div class="error text-danger" v-if="this.errPass">
+                    {{ this.errPass}}
+                </div>
                 <div class="my-3">
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
@@ -25,28 +32,35 @@
 
 <script>
 
+import router from '@/router';
+import signInValidations from '../services/signInValidations';
 
 export default {
     data() {
         return {
             email: '',
-            password: ''
+            password: '',
+            errMail: '',
+            errPass: '',
         }
     },
 
     methods: {
-        async submitLogin() {
-            const data = await {
-                email: this.email,
-                password: this.password
-                
-            };
-            
-console.log(data);
+        submitLogin() {
+            let validations = new signInValidations(this.email, this.password);
+            this.errMail = validations.checkEmail();
+            this.errPass = validations.checkPassword();
+            if (this.errMail != '') {
+                return this.errMail;
+            }
+            else if (this.errPass != '') {
+                return this.errPass;
+            }
+            else{
+                router.push('./home-page');
+            }
 
-        },
+        }
     }
-
-
 }
 </script>
