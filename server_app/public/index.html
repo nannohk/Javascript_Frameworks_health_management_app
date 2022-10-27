@@ -17,7 +17,8 @@
                     <label>Password</label>
                     <input id="pwd" type="password" placeholder="Enter password">
                 </div>
-                <button type="button" onclick="submitLogin()">Login</button>
+                <button type="button" onclick="login()">Login</button>
+                <button type="button" onclick="signUp()">Sign Up</button>
         </div>
         </form>
     </div>
@@ -27,19 +28,30 @@
 <script>
     var mail = '';
     var pwd = '';
+    var purpose='';
 
-    // obtain the input
-    function submitLogin() {
+    // obtain the input for signup
+    function signUp() {
                 //store the user's entry in a variable
                 mail = document.getElementById('e-mail').value;
                 pwd = document.getElementById('pwd').value;
+                purpose = 'signup';
+                authentication();
+    }
+
+    // obtain the input for login
+    function login() {
+                //store the user's entry in a variable
+                mail = document.getElementById('e-mail').value;
+                pwd = document.getElementById('pwd').value;
+                purpose = 'login';
                 authentication();
     }
 
     async function authentication() {
         const email = this.mail;
         const password = this.pwd;
-        const data = { email, password };
+        const data = { email, password, purpose };
         const options = {
             method: 'POST',
             body: JSON.stringify(data),

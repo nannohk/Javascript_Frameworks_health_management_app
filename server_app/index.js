@@ -33,9 +33,16 @@ function(err)
 
 app.post('/api',(request,response) =>{
     console.log("I got a request");
-    
+
     //insert data passed from client to database
-    insertData(request.body.email, request.body.password);
+    if(request.body.purpose == "signup")
+    {
+        insertData(request.body.email,request.body.password);
+    }
+    else if(request.body.purpose == "login")
+    {
+console.log("login request");
+    }
 
     response.json({
         status: 'success',
