@@ -6,6 +6,12 @@ app.use(express.json({ limit: '1mb' }));
 
 /***************************************************************************************************** */
 //Database information
+// db.run('CREATE TABLE users (email Varchar2(100) PRIMARY KEY, password Varchar2(100))');
+// db.close((err) => {
+//     if (err) return console.error(err.message);
+// });
+
+const sql = `INSERT INTO users (email, password) VALUES(?,?)`;
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./datastore/serverDB.db',sqlite3.OPEN_READWRITE, (err) => {
     if (err) return console.error(err.message);
@@ -13,25 +19,24 @@ const db = new sqlite3.Database('./datastore/serverDB.db',sqlite3.OPEN_READWRITE
     console.log('Connected to the project database.');
 });
 
-// db.run('CREATE TABLE users (email Varchar2(100) PRIMARY KEY, password Varchar2(100))');
-
-const sql = `INSERT INTO users (email, password) VALUES(?,?)`;
-
-db.run(sql, ['jane@yahoo.com','pass1234'],
+function insertData(email, password) {
+db.run(sql, [email,password],
  function(err){
     if (err) return console.error(err.message);
     console.log(`A row has been inserted with rowid ${this.lastID}`);
 });
-
-
+}
 /******************************************************************************************************* */
+
+
 app.post('/api',(request,response) =>{
     console.log("I got a request");
+    //insert data passed from client to database
+    insertData(request.body.email, request.body.password);
+
     response.json({
         status: 'success',
     });
 });
 
-db.close((err) => {
-    if (err) return console.error(err.message);
-});
+
