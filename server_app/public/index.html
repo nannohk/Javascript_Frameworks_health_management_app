@@ -1,8 +1,37 @@
 <html>
-    <head>
-        <title>My App</title>
-    </head>
-    <body>
-        <h1>You have gained access to the server!</h1>
-    </body>
+
+<head>
+    <title>My App</title>
+</head>
+
+<body>
+    <h1>You have gained access to the server!</h1>
+    <script>
+        if ('geolocation' in navigator) {
+            console.log('geolocation available');
+            navigator.geolocation.getCurrentPosition(async position => {
+                const lat = position.coords.latitude;
+                const long = position.coords.longitude;
+                const data = { lat, long };
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                    
+                };
+                
+                const response = await fetch('/api', options);
+                const json = await response.json();
+                console.log(json);
+                
+            });
+
+        }
+        else {
+            console.log('geolocation not available');
+        }
+    </script>
+</body>
 </html>
