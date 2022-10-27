@@ -19,9 +19,11 @@ const db = new sqlite3.Database('./datastore/serverDB.db',sqlite3.OPEN_READWRITE
     console.log('Connected to the project database.');
 });
 
-function insertData(email, password) {
+function insertData(email, password)
+{
 db.run(sql, [email,password],
- function(err){
+function(err)
+{
     if (err) return console.error(err.message);
     console.log(`A row has been inserted with rowid ${this.lastID}`);
 });
@@ -31,6 +33,7 @@ db.run(sql, [email,password],
 
 app.post('/api',(request,response) =>{
     console.log("I got a request");
+    
     //insert data passed from client to database
     insertData(request.body.email, request.body.password);
 

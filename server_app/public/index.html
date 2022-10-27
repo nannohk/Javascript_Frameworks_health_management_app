@@ -6,28 +6,24 @@
 
 <body>
     <h1>You have gained access to the server!</h1>
-    <script>
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(async position => {
-                const email = `test@gmail.com`;
-                const password = 'test';
-                const data = { email, password };
-                const options = {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                };
-                
-                const response = await fetch('/api', options);
-                const json = await response.json();
-                console.log(json);
-            });
-        }
-        else {
-            console.log('geolocation not available');
-        }
-    </script>
 </body>
+
+<script>
+    async authentication => {
+            const email = `test@gmail.com`;
+            const password = 'test';
+            const data = { email, password };
+            const options = {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            
+            const response = await fetch('/api', options);
+            const json = await response.json();
+            console.log(json);
+        };
+</script>
 </html>
