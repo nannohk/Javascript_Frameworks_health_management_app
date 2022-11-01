@@ -11,42 +11,68 @@ app.use(express.json({ limit: '1mb' }));
 //     if (err) return console.error(err.message);
 // });
 
-const sql = `INSERT INTO users (email, password) VALUES(?,?)`;
+let authStatus = false;
+const sqlInt = `INSERT INTO users (email, password) VALUES(?,?)`;
+const sqlSelect = `SELECT email, password FROM users WHERE email = ? and password = ?`;
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./datastore/serverDB.db',sqlite3.OPEN_READWRITE, (err) => {
+const db = new sqlite3.Database('./datastore/serverDB.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) return console.error(err.message);
-
     console.log('Connected to the project database.');
 });
 
-function insertData(email, password)
-{
-db.run(sql, [email,password],
-function(err)
-{
-    if (err) return console.error(err.message);
-    console.log(`A row has been inserted with rowid ${this.lastID}`);
-});
+function insertData(email, password) {
+    db.run(sqlInt, [email, password],
+        function (err) {
+            if (err) return console.error(err.message);
+            console.log(`A row has been inserted with rowid ${this.lastID}`);
+        });
+}
+
+function selectData(email,password) {
+    return new Promise((resolve, reject) => {
+        db.all(sqlSelect, [email, password], (err, rows) => {
+            if (err || rows.length == 0) {
+                reject({
+                    message:err,
+                    auth:false
+                });
+                console.log(err);
+            }
+            else{
+                resolve({
+                    message:rows,
+                    auth:true
+                });
+                console.log(rows);
+            }
+        });
+    });
 }
 /******************************************************************************************************* */
 
 
-app.post('/api',(request,response) =>{
-    console.log("I got a request");
 
+app.post('/api', (request, response) => {
+    console.log("Post function");
     //insert data passed from client to database
-    if(request.body.purpose == "signup")
-    {
-        insertData(request.body.email,request.body.password);
+    if (request.body.purpose == "signup") {
+        insertData(request.body.email, request.body.password);
+        response.json({
+            status: ' creation success',
+
+        });
     }
-    else if(request.body.purpose == "login")
-    {
-console.log("login request");
-    }
-
-    response.json({
-        status: 'success',
-    });
-});
-
-
+    else if (request.body.purpose == "login") {
+        console.log("login request");
+        selectData(request.body.email, request.body.password).then((sol) => {
+                console.log("login success" + sol.auth);
+                response.json({
+                    status: 'successful authentication',
+                });
+        }).catch((err) => {
+            console.log("login failed" + err.auth);
+            response.json({
+                status: 'failed authentication',
+            });
+        });
+}});

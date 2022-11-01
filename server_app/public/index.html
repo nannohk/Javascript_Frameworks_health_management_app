@@ -40,13 +40,13 @@
     }
 
     // obtain the input for login
-    function login() {
+ async function login() {
                 //store the user's entry in a variable
                 mail = document.getElementById('e-mail').value;
                 pwd = document.getElementById('pwd').value;
                 purpose = 'login';
                 authentication();
-    }
+            }
 
     async function authentication() {
         const email = this.mail;
@@ -59,7 +59,7 @@
                 'Content-Type': 'application/json'
             }
         };
-console.log(data);
+
         const response = await fetch('/api', options);
         const json = await response.json();
         console.log(json);
