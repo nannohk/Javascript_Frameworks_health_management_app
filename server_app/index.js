@@ -67,14 +67,12 @@ app.post('/', (request, response) => {
         selectData(request.body.email, request.body.password).then((sol) => {
             console.log("login success");
             response.json({
-                status: 'successful authentication',
-                code: 1
+                status: 'success',
             });
         }).catch((err) => {
             console.log("login failed");
             response.json({
-                status: 'failed authentication',
-                code: 0
+                status: 'failed',
             });
         });
     }

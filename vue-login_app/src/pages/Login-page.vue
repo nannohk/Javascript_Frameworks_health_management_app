@@ -32,6 +32,7 @@
 
 <script>
 
+import router from '@/router';
 import axios from 'axios';
 // import router from '@/router';
 // import signInValidations from '../services/signInValidations';
@@ -48,8 +49,6 @@ export default {
 
     methods: {
         async submitLogin() {
-
-
             const options = {
                 method: 'post',
                 url: 'http://localhost:1500/',
@@ -59,11 +58,15 @@ export default {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-
             }
 
             await axios.post('http://localhost:1500/', options).then((res) => {
-                console.log(res.data.code);
+                if (res.data.status === 'success') {
+                    console.log(res.data.status);
+                    router.push('/home-page');
+                } else {
+                    console.log(res.data.status);
+                }
             }).catch((err) => {
                 console.log(err);
             })
