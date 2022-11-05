@@ -9,7 +9,7 @@ export default class signInCalidations{
     checkEmail(){
         let emailErr = "";
         //email validation
-        if(this.email != "user@unb.ca"){
+        if(this.email != "test@gmail.ca"){
            emailErr = "Invalid email";
         }
         return emailErr;
@@ -18,7 +18,7 @@ export default class signInCalidations{
     //password validation
     checkPassword(){
         let passwordErr = "";
-    if(this.password != 'user01!'){
+    if(this.password != 'test'){
             passwordErr = "Password is incorrect";
         }
         return passwordErr;

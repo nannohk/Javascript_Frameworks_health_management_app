@@ -20,7 +20,7 @@
 
                 </div>
                 <div class="error text-danger" v-if="this.errPass">
-                    {{ this.errPass}}
+                    {{ this.errPass }}
                 </div>
                 <div class="my-3">
                     <button type="submit" class="btn btn-primary">Login</button>
@@ -32,8 +32,9 @@
 
 <script>
 
-import router from '@/router';
-import signInValidations from '../services/signInValidations';
+import axios from 'axios';
+// import router from '@/router';
+// import signInValidations from '../services/signInValidations';
 
 export default {
     data() {
@@ -46,21 +47,29 @@ export default {
     },
 
     methods: {
-        submitLogin() {
-            let validations = new signInValidations(this.email, this.password);
-            this.errMail = validations.checkEmail();
-            this.errPass = validations.checkPassword();
-            if (this.errMail != '') {
-                return this.errMail;
+        async submitLogin() {
+
+
+            const options = {
+                method: 'post',
+                url: 'http://localhost:1500/',
+                email: this.email,
+                password: this.password,
+                purpose: 'login',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
             }
-            else if (this.errPass != '') {
-                return this.errPass;
-            }
-            else{
-                router.push('./home-page');
-            }
+
+            await axios.post('http://localhost:1500/', options).then((res) => {
+                console.log(res.data.code);
+            }).catch((err) => {
+                console.log(err);
+            })
 
         }
     }
+
 }
 </script>

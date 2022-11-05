@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
-app.listen(1500, () => console.log('Server running on port 1500'));
-app.use(express.static('public'));
+const cors = require('cors')
+app.use(cors());
+app.set('port', '1500');
 app.use(express.json({ limit: '1mb' }));
+app.listen(1500, () => console.log('Server running on port 1500'));
 
 /***************************************************************************************************** */
 //Database information
@@ -28,22 +30,20 @@ function insertData(email, password) {
         });
 }
 
-function selectData(email,password) {
+function selectData(email, password) {
     return new Promise((resolve, reject) => {
         db.all(sqlSelect, [email, password], (err, rows) => {
             if (err || rows.length == 0) {
                 reject({
-                    message:err,
-                    auth:false
+                    message: err,
+                    auth: false
                 });
-                console.log(err);
             }
-            else{
+            else {
                 resolve({
-                    message:rows,
-                    auth:true
+                    message: rows,
+                    auth: true
                 });
-                console.log(rows);
             }
         });
     });
@@ -52,8 +52,8 @@ function selectData(email,password) {
 
 
 
-app.post('/api', (request, response) => {
-    console.log("Post function");
+app.post('/', (request, response) => {
+
     //insert data passed from client to database
     if (request.body.purpose == "signup") {
         insertData(request.body.email, request.body.password);
@@ -65,14 +65,17 @@ app.post('/api', (request, response) => {
     else if (request.body.purpose == "login") {
         console.log("login request");
         selectData(request.body.email, request.body.password).then((sol) => {
-                console.log("login success" + sol.auth);
-                response.json({
-                    status: 'successful authentication',
-                });
+            console.log("login success");
+            response.json({
+                status: 'successful authentication',
+                code: 1
+            });
         }).catch((err) => {
-            console.log("login failed" + err.auth);
+            console.log("login failed");
             response.json({
                 status: 'failed authentication',
+                code: 0
             });
         });
-}});
+    }
+});
