@@ -33,14 +33,43 @@
 </template>
 
 <script>
-// import router from '@/router';
+import router from '@/router';
+import axios from 'axios';
+// import email  from '@/pages/Login-page';
+
 export default {
     methods: {
-        submitProfile() {
-            // router.push('./home-page');
+        async submitProfile() {
+            const email = localStorage.getItem('email');
+            const profile = {
+                method: 'post',
+                url: 'http://localhost:1500/',
+                email: email,
+                fullName: this.fullName,
+                address: this.address, gender: this.gender,
+                license: this.license,
+                purpose: 'profileUpdate',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            await axios.post('http://localhost:1500/', profile).then((res) => {
+                if (res.data.status === 'success') {
+                    console.log(res.data.status);
+                    router.push('./home-page');
+                } else {
+                    console.log(res.data.status);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+
+
         }
     },
-    data: function () {
+
+    data() {
         return {
             fullName: '',
             address: '',

@@ -33,9 +33,8 @@
 </template>
 <script>
 
-import router from '@/router';
 import axios from 'axios';
-// import router from '@/router';
+import router from '@/router';
 // import signInValidations from '../services/signInValidations';
 
 export default {
@@ -64,7 +63,8 @@ export default {
             await axios.post('http://localhost:1500/', options).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.status);
-                    router.push('/profile-page');
+                    localStorage.setItem('email', this.email);
+                    router.push('/profile-page', { params: { email: this.email } });
                 } else {
                     console.log(res.data.status);
                 }

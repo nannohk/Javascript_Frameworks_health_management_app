@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const cors = require('cors')
+const cors = require('cors');
+const e = require('express');
 app.use(cors());
 app.set('port', '1500');
 app.use(express.json({ limit: '1mb' }));
@@ -76,4 +77,11 @@ app.post('/', (request, response) => {
             });
         });
     }
-});
+    else if(request.body.purpose == "profileUpdate"){
+        console.log("profile update request");
+        response.json({
+            status: 'success',
+        });
+    }
+
+    });
