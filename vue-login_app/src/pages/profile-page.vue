@@ -4,6 +4,16 @@
             <h3>Profile</h3>
             <hr />
         </div>
+        <div class="avatar-upload">
+            <div class="avatar-edit">
+                <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
+                <label for="imageUpload"></label>
+            </div>
+            <div class="avatar-preview">
+                <div id="imagePreview" style="background-image: url(https://i.imgur.com/8kLWJjA.png);">
+                </div>
+            </div>
+        </div>
         <div class="col-12 form-group">
             <label class="col-form-label col-form-label-lg">Full Name</label>
             <input type="text" class="form-control form-control-lg" placeholder="Enter full name" v-model="fullName" />
@@ -57,6 +67,7 @@ export default {
             await axios.post('http://localhost:1500/', profile).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.status);
+                    //get the role from the server and detemine the page to direct the user to
                     router.push('./home-page');
                 } else {
                     console.log(res.data.status);
@@ -73,7 +84,7 @@ export default {
         return {
             fullName: '',
             address: '',
-            license: '',
+            license: false,
             gender: '',
         }
     }

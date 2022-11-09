@@ -3,10 +3,10 @@
         <div class="col-md-4 shadow bg-white">
             <div>
                 <div>
-                    <h3>Login</h3>
+                    <h3>Sign Up</h3>
                     <hr />
                 </div>
-                <form @submit.prevent="submitLogin">
+                <form @submit.prevent="signUp">
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" class="form-control" placeholder="Enter email" v-model="email">
@@ -24,13 +24,9 @@
                         {{ this.errPass }}
                     </div>
                     <div class="my-3">
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
                     </div>
                 </form>
-
-                <div class="my-3" >
-                        <button type="button" class="btn btn-primary" @click="signUp">Sign Up</button>
-                </div>
             </div>
         </div>
     </div>
@@ -39,7 +35,6 @@
 
 import axios from 'axios';
 import router from '@/router';
-// import signInValidations from '../services/signInValidations';
 
 export default {
     data() {
@@ -52,27 +47,24 @@ export default {
     },
 
     methods: {
-        signUp() {
-            router.push('/signup-page');
-        },
-
-        async submitLogin() {
+        async signUp() {
             const options = {
                 method: 'post',
                 url: 'http://localhost:1500/',
                 email: this.email,
                 password: this.password,
-                purpose: 'login',
+                role: 'client',
+                purpose: 'signup',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
 
             await axios.post('http://localhost:1500/', options).then((res) => {
-                if (res.data.status === 'success') {
+                if (res.data.status === 'creation success') {
                     console.log(res.data.status);
                     localStorage.setItem('email', this.email);
-                    router.push('/profile-page', { params: { email: this.email } });
+                    router.push('/profile-page');
                 } else {
                     console.log(res.data.status);
                 }

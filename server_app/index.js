@@ -11,15 +11,16 @@ app.listen(1500, () => console.log('Server running on port 1500'));
 //Database information
 //db.run('drop table if exists users');
 
-// db.run('CREATE TABLE users (email Varchar2(100) PRIMARY KEY, password Varchar2(100),fullname varchar2(200),
-//address varchar2(200),gender varchar2(10),license boolean)');
+// db.run('CREATE TABLE users (email Varchar2(100) PRIMARY KEY, password Varchar2(100),fullname varchar2(200),role varchar2(100),
+//profileImage blob,address varchar2(200),gender varchar2(10),license boolean)');
+// db.run('CREATE view admin_list as select email,fullname,role,gender,address,license from users');
 
 // db.close((err) => {
 //     if (err) return console.error(err.message);
 // });
 
 let authStatus = false;
-const sqlInt = `INSERT INTO users (email, password) VALUES(?,?)`;
+const sqlInt = `INSERT INTO users (email, password,role) VALUES(?,?,?)`;
 const sqlUpdate = `UPDATE users SET fullname = ?,address=?, gender=?, license=? WHERE email = ?`;
 const sqlSelect = `SELECT email, password FROM users WHERE email = ? and password = ?`;
 const sqlite3 = require('sqlite3').verbose();
@@ -27,6 +28,7 @@ const db = new sqlite3.Database('./datastore/serverDB.db', sqlite3.OPEN_READWRIT
     if (err) return console.error(err.message);
     console.log('Connected to the project database.');
 });
+
 
 function updateData(email, fullname, address, gender, license) {
     return new Promise((resolve, reject) => {
@@ -42,8 +44,8 @@ function updateData(email, fullname, address, gender, license) {
     });
 }
 
-function insertData(email, password) {
-    db.run(sqlInt, [email, password],
+function insertData(email, password,role) {
+    db.run(sqlInt, [email, password,role],
         function (err) {
             if (err) return console.error(err.message);
             console.log(`A row has been inserted with rowid ${this.lastID}`);
@@ -76,15 +78,14 @@ app.post('/', (request, response) => {
 
     //insert data passed from client to database
     if (request.body.purpose == "signup") {
-        insertData(request.body.email, request.body.password);
+        insertData(request.body.email, request.body.password,request.body.role);
         response.json({
-            status: ' creation success',
-
+            status: 'creation success',
         });
     }
     else if (request.body.purpose == "login") {
         console.log("login request");
-        // insertData('test@gmail.com', 'test');
+        //  insertData('client@gmail.com', 'client');
         selectData(request.body.email, request.body.password).then((sol) => {
             console.log("login success");
             response.json({
@@ -99,17 +100,18 @@ app.post('/', (request, response) => {
     }
     else if (request.body.purpose == "profileUpdate") {
         console.log("profile update request");
-        updateData(request.body.email, request.body.fullName, request.body.address, request.body.gender, request.body.license).then((sol) => {
-            console.log("profile update success");
-            response.json({
-                status: 'success',
+        updateData(request.body.email, request.body.fullName, request.body.address, request.body.gender,
+            request.body.license).then((sol) => {
+                console.log("profile update success");
+                response.json({
+                    status: 'success',
+                });
+            }).catch((err) => {
+                console.log("profile update failed");
+                response.json({
+                    status: 'failed',
+                });
             });
-        }).catch((err) => {
-            console.log("profile update failed");
-            response.json({
-                status: 'failed',
-            });
-        });
     }
 
 });
