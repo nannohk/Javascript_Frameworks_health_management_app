@@ -70,12 +70,24 @@ function selectData(email, password) {
         });
     });
 }
+
+function selectAdminList() {
+    return new Promise((resolve, reject) => {
+        db.all('select * from admin_list', (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(rows);
+            }
+        });
+    });
+}
 /******************************************************************************************************* */
 
 
 
 app.post('/', (request, response) => {
-
     //insert data passed from client to database
     if (request.body.purpose == "signup") {
         insertData(request.body.email, request.body.password,request.body.role);
@@ -112,6 +124,21 @@ app.post('/', (request, response) => {
                     status: 'failed',
                 });
             });
+    }
+    else if (request.body.purpose == "getAdminList") {
+        console.log("admin list request");
+        selectAdminList().then((sol) => {
+            console.log("admin list success");
+            response.json({
+                status: 'success',
+                list: sol
+            });
+        }).catch((err) => {
+            console.log("admin list failed");
+            response.json({
+                status: 'failed',
+            });
+        });
     }
 
 });
