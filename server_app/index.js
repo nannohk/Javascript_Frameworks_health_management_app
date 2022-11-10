@@ -52,7 +52,7 @@ function insertData(email, password,role) {
         });
 }
 
-function selectData(email, password) {
+function loginData(email, password) {
     return new Promise((resolve, reject) => {
         db.all(sqlSelect, [email, password], (err, rows) => {
             if (err || rows.length == 0) {
@@ -73,7 +73,20 @@ function selectData(email, password) {
 
 function selectAdminList() {
     return new Promise((resolve, reject) => {
-        db.all('select * from admin_list', (err, rows) => {
+        db.all('select email,fullname,role,profileImage,address,gender,license from users', (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+function selectClientData(email) {
+    return new Promise((resolve, reject) => {
+        db.all('select email,password,fullname,role,profileImage,address,gender,license from users where email = ?', [email], (err, rows) => {
             if (err) {
                 reject(err);
             }
@@ -98,7 +111,7 @@ app.post('/', (request, response) => {
     else if (request.body.purpose == "login") {
         console.log("login request");
         //  insertData('client@gmail.com', 'client');
-        selectData(request.body.email, request.body.password).then((sol) => {
+        loginData(request.body.email, request.body.password).then((sol) => {
             console.log("login success");
             response.json({
                 status: 'success',
@@ -137,6 +150,21 @@ app.post('/', (request, response) => {
             });
         }).catch((err) => {
             console.log("admin list failed");
+            response.json({
+                status: 'failed',
+            });
+        });
+    }
+    else if (request.body.purpose == "getClientData"){
+        console.log("client data request");
+        selectClientData(request.body.email).then((sol) => {
+            console.log("client data success");
+            response.json({
+                status: 'success',
+                list: sol
+            });
+        }).catch((err) => {
+            console.log("client data failed");
             response.json({
                 status: 'failed',
             });

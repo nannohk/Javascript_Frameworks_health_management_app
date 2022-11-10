@@ -1,5 +1,6 @@
 <template>
     <h1> home</h1>
+
     <table class="table table-striped mt-4">
         <thead>
             <tr>
@@ -13,15 +14,15 @@
         </thead>
         <tbody>
             <tr v-for="user in users" :key="user.email">
-                <td>{{user.fullname}}</td>
-                <td>{{user.gender}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.address}}</td>
+                <td>{{ user.fullname }}</td>
+                <td>{{ user.gender }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.address }}</td>
                 <td v-if="user.license == 1">yes</td>
                 <td v-else>no</td>
-                <td>{{user.role}}</td>
+                <td>{{ user.role }}</td>
             </tr>
-           
+
         </tbody>
     </table>
 
@@ -37,8 +38,8 @@
 import router from '@/router';
 import axios from 'axios';
 export default {
-    data(){
-        return{
+    data() {
+        return {
             users: []
         }
     },
@@ -53,15 +54,15 @@ export default {
 
             const profile = {
                 method: 'post',
+                email: localStorage.getItem('email'),
                 url: 'http://localhost:1500/',
-                purpose: 'getAdminList',
+                purpose: 'getClientData',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
             await axios.post('http://localhost:1500/', profile).then((res) => {
                 if (res.data.status === 'success') {
-                    console.log(res.data.list);
                     this.users = res.data.list;
                 } else {
                     console.log(res.data.status);
@@ -72,8 +73,8 @@ export default {
 
         }
     },
-    mounted: function(){
-         this.getAdminData();
+    mounted: function () {
+        this.getAdminData();
     }
 }
 
