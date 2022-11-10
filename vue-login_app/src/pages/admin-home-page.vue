@@ -16,7 +16,7 @@
                 <td>{{user.gender}}</td>
                 <td>{{user.email}}</td>
                 <td>{{user.address}}</td>
-                <td v-if="user.license = 1">yes</td>
+                <td v-if="user.license == 1">yes</td>
                 <td v-else>no</td>
                 <td>{{user.role}}</td>
             </tr>
@@ -43,6 +43,7 @@ export default {
     },
     methods: {
         SignOut() {
+            localStorage.clear();
             router.push('./login-page');
         }
         ,

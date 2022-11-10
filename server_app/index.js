@@ -22,7 +22,7 @@ app.listen(1500, () => console.log('Server running on port 1500'));
 let authStatus = false;
 const sqlInt = `INSERT INTO users (email, password,role) VALUES(?,?,?)`;
 const sqlUpdate = `UPDATE users SET fullname = ?,address=?, gender=?, license=? WHERE email = ?`;
-const sqlSelect = `SELECT email, password FROM users WHERE email = ? and password = ?`;
+const sqlSelect = `SELECT email, password,role,fullname FROM users WHERE email = ? and password = ?`;
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./datastore/serverDB.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) return console.error(err.message);
@@ -102,6 +102,8 @@ app.post('/', (request, response) => {
             console.log("login success");
             response.json({
                 status: 'success',
+                role: sol.message[0].role,
+                fullname: sol.message[0].fullname,
             });
         }).catch((err) => {
             console.log("login failed");

@@ -67,8 +67,13 @@ export default {
             await axios.post('http://localhost:1500/', profile).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.status);
-                    //get the role from the server and detemine the page to direct the user to
-                    router.push('./home-page');
+                    //get the role and detemine the page to direct the user to
+                    const role = localStorage.getItem('role');
+                    if (role === 'admin') {
+                        router.push('/admin-home-page');
+                    } else  {
+                        router.push('/client-home-page');
+                    }
                 } else {
                     console.log(res.data.status);
                 }

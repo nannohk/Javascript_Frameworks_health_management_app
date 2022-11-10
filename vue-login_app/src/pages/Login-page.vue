@@ -71,8 +71,20 @@ export default {
             await axios.post('http://localhost:1500/', options).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.status);
+
                     localStorage.setItem('email', this.email);
-                    router.push('/profile-page', { params: { email: this.email } });
+                    localStorage.setItem('role', res.data.role);
+                    // if the user doesn't have a profile, direct them to the profile page
+                    if(res.data.fullname === null) {
+                        router.push('/profile-page');
+                    } else {
+                        //get the role from the server and detemine the page to direct the user to the right page
+                        if(res.data.role === 'admin') {
+                            router.push('/admin-home-page');
+                        } else {
+                            router.push('/client-home-page');
+                        }
+                    }
                 } else {
                     console.log(res.data.status);
                 }
