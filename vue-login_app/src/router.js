@@ -21,9 +21,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.meta.auth && !localStorage.getItem('email')) {
         next('/login-page');
-    } else if(!to.meta.auth && localStorage.getItem('email'))
-    {
-        next('/login-page');
+    // } else if(!to.meta.auth && localStorage.getItem('email'))
+    // {
+    //     next('/login-page');
     } else {
         next();
     }
