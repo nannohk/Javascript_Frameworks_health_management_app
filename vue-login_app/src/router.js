@@ -6,16 +6,27 @@ import Profile from "./pages/profile-page.vue";
 import SignUp from "./pages/signup-page.vue";
 
 const routes = [
-    {path:'/login-page', component: Login},
-    {path:'/admin-home-page', component: AdminHome},
-    {path:'/client-home-page', component: ClientHome},
-    {path:'/profile-page', component: Profile},
-    {path:'/signup-page', component: SignUp},
-    ];
+    { path: '/login-page', component: Login, meta: { auth: false } },
+    { path: '/admin-home-page', component: AdminHome, meta: { auth: true } },
+    { path: '/client-home-page', component: ClientHome, meta: { auth: true } },
+    { path: '/profile-page', component: Profile, meta: { auth: true } },
+    { path: '/signup-page', component: SignUp, meta: { auth: false } },
+];
 
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.auth && !localStorage.getItem('email')) {
+        next('/login-page');
+    } else if(!to.meta.auth && localStorage.getItem('email'))
+    {
+        next('/login-page');
+    } else {
+        next();
+    }
 })
 
 export default router;

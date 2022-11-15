@@ -1,11 +1,16 @@
 const express = require('express');
+const multer = require('multer');
 const app = express();
 const cors = require('cors');
 const e = require('express');
+const { response } = require('express');
 app.use(cors());
 app.set('port', '1500');
 app.use(express.json({ limit: '1mb' }));
 app.listen(1500, () => console.log('Server running on port 1500'));
+const upload = multer({
+    dest: './datastore/uploads/',
+});
 
 /***************************************************************************************************** */
 //Database information
@@ -44,8 +49,8 @@ function updateData(email, fullname, address, gender, license) {
     });
 }
 
-function insertData(email, password,role) {
-    db.run(sqlInt, [email, password,role],
+function insertData(email, password, role) {
+    db.run(sqlInt, [email, password, role],
         function (err) {
             if (err) return console.error(err.message);
             console.log(`A row has been inserted with rowid ${this.lastID}`);
@@ -98,19 +103,21 @@ function selectClientData(email) {
 }
 /******************************************************************************************************* */
 
-
-
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.json({cool: 'cool'});
+});
+    
 app.post('/', (request, response) => {
+    console.log(request);
     //insert data passed from client to database
     if (request.body.purpose == "signup") {
-        insertData(request.body.email, request.body.password,request.body.role);
+        insertData(request.body.email, request.body.password, request.body.role);
         response.json({
             status: 'creation success',
         });
     }
     else if (request.body.purpose == "login") {
         console.log("login request");
-        //  insertData('client@gmail.com', 'client');
         loginData(request.body.email, request.body.password).then((sol) => {
             console.log("login success");
             response.json({
@@ -155,7 +162,7 @@ app.post('/', (request, response) => {
             });
         });
     }
-    else if (request.body.purpose == "getClientData"){
+    else if (request.body.purpose == "getClientData") {
         console.log("client data request");
         selectClientData(request.body.email).then((sol) => {
             console.log("client data success");

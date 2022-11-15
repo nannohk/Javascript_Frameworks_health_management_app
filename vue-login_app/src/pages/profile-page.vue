@@ -1,17 +1,20 @@
 <template>
-    <div class="row col-md-8 form-group shadow align-items-center">
-        <div>
-            <h3>Profile</h3>
-            <hr />
-        </div>
-        <div class="avatar-upload">
-            <div class="avatar-edit">
-                <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
-                <label for="imageUpload"></label>
-            </div>
-            <div class="avatar-preview">
-                <div id="imagePreview" style="background-image: url(https://i.imgur.com/8kLWJjA.png);">
-                </div>
+<form @submit.prevent="submitIMG" enctype="multipart/form-data" class="section form-group mt-5 shadow col-md-5">
+    <div class="row container">
+        <label for="imageUpload">Upload File</label>
+        <input enctype="multipart/form-data" class="small" type='file' accept=".png, .jpg, .jpeg" @change="onFileSelected" />
+    </div>
+    <div class="field">
+        <button class="btn btn-primary col-3" @click="submitIMG"> Upload Image</button>
+    </div>
+</form>
+
+<br/>
+    <div class="col-md-12  form-group shadow align-items-center mt-5">
+        <div class="row col-md-8 form-group ">
+            <div>
+                <h3>Profile</h3>
+                <hr />
             </div>
         </div>
         <div class="col-12 form-group">
@@ -45,10 +48,27 @@
 <script>
 import router from '@/router';
 import axios from 'axios';
-// import email  from '@/pages/Login-page';
 
 export default {
     methods: {
+        onFileSelected(event) {
+            this.selectedFile = event.target.files[0];
+            console.log(this.selectedFile);
+        },
+
+        async submitIMG() {
+            const formData = new FormData();
+            formData.append('file', this.selectedFile);
+            formData.append('headers', {
+                'Content-Type': 'multipart/form-data'
+            });
+            try {
+                await axios.post('http://localhost:1500/upload', formData);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async submitProfile() {
             const email = localStorage.getItem('email');
             const profile = {
@@ -60,7 +80,7 @@ export default {
                 license: this.license,
                 purpose: 'profileUpdate',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json, multipart/form-data'
                 }
             }
 
@@ -71,7 +91,8 @@ export default {
                     const role = localStorage.getItem('role');
                     if (role === 'admin') {
                         router.push('/admin-home-page');
-                    } else  {
+
+                    } else {
                         router.push('/client-home-page');
                     }
                 } else {
@@ -91,6 +112,7 @@ export default {
             address: '',
             license: false,
             gender: '',
+            selectedFile:""
         }
     }
 }

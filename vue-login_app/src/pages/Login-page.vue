@@ -28,8 +28,8 @@
                     </div>
                 </form>
 
-                <div class="my-3" >
-                        <button type="button" class="btn btn-primary" @click="signUp">Sign Up</button>
+                <div class="my-3">
+                    <button type="button" class="btn btn-primary" @click="signUp">Sign Up</button>
                 </div>
             </div>
         </div>
@@ -75,13 +75,14 @@ export default {
                     localStorage.setItem('email', this.email);
                     localStorage.setItem('role', res.data.role);
                     // if the user doesn't have a profile, direct them to the profile page
-                    if(res.data.fullname === null) {
+                    if (res.data.fullname === null) {
                         router.push('/profile-page');
                     } else {
                         //get the role from the server and detemine the page to direct the user to the right page
-                        if(res.data.role === 'admin') {
+                        if (res.data.role === 'admin') {
                             router.push('/admin-home-page');
                         } else {
+                            // router.push('/profile-page');
                             router.push('/client-home-page');
                         }
                     }

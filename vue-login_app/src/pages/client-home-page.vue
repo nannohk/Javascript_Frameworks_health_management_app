@@ -1,6 +1,11 @@
 <template>
     <h1> home</h1>
-
+    <div class="my-3">
+                    <button type="button" class="btn btn-primary" @click="Profile">Profile</button>
+                </div>
+    <!-- <div>
+        <img class="h-24 w-24 round-full object-cover" src="{{this.imgUrl}}"/>
+    </div> -->
     <table class="table table-striped mt-4">
         <thead>
             <tr>
@@ -40,17 +45,23 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            users: []
+            users: [],
+            profileImage:null,
+            imgUrl:'',
         }
     },
     methods: {
+        Profile() {
+            router.push('/profile-page');
+        },
+    
         SignOut() {
             localStorage.clear();
             router.push('./login-page');
         }
         ,
 
-        async getAdminData() {
+        async getClientData() {
 
             const profile = {
                 method: 'post',
@@ -64,6 +75,7 @@ export default {
             await axios.post('http://localhost:1500/', profile).then((res) => {
                 if (res.data.status === 'success') {
                     this.users = res.data.list;
+                    this.profileImage = res.data.list[0].profileImage;
                 } else {
                     console.log(res.data.status);
                 }
@@ -74,7 +86,7 @@ export default {
         }
     },
     mounted: function () {
-        this.getAdminData();
+        this.getClientData();
     }
 }
 
