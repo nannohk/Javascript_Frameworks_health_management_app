@@ -103,8 +103,9 @@ function selectClientData(email) {
 }
 /******************************************************************************************************* */
 
-app.post('/upload', upload.single('file'), (req, res) => {
-    res.json({cool: 'cool'});
+
+app.post('/upload', upload.single('file'),(req, res) => {
+    res.json({file: req.file});
 });
     
 app.post('/', (request, response) => {

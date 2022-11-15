@@ -4,6 +4,9 @@
         <label for="imageUpload">Upload File</label>
         <input enctype="multipart/form-data" class="small" type='file' accept=".png, .jpg, .jpeg" @change="onFileSelected" />
     </div>
+    <div v-if="message" class="alert alert-success" role="alert">
+        {{message}}
+    </div>
     <div class="field">
         <button class="btn btn-primary col-3" @click="submitIMG"> Upload Image</button>
     </div>
@@ -53,7 +56,6 @@ export default {
     methods: {
         onFileSelected(event) {
             this.selectedFile = event.target.files[0];
-            console.log(this.selectedFile);
         },
 
         async submitIMG() {
@@ -64,6 +66,8 @@ export default {
             });
             try {
                 await axios.post('http://localhost:1500/upload', formData);
+                this.message = 'File uploaded successfully';
+                this.selectedFile='';
             } catch (error) {
                 console.log(error);
             }
@@ -112,7 +116,8 @@ export default {
             address: '',
             license: false,
             gender: '',
-            selectedFile:""
+            selectedFile:"",
+            message: ''
         }
     }
 }
