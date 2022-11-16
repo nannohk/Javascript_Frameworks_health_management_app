@@ -9,7 +9,7 @@
                 <form @submit.prevent="signUp">
                     <div class="form-outline form-white mb-4">
                         <label style="color: #0D6EFD;">Email</label>
-                        <input type="email" class="form-control" placeholder="Enter email" v-model="email">
+                        <input type="email" class="form-control form-control-lg" placeholder="Enter email" v-model="email">
 
                     </div>
                     <div class="error text-danger" v-if="this.errMail">
@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-outline form-white mb-4">
                         <label style="color: #0D6EFD;">Password</label>
-                        <input type="password" class="form-control" placeholder="Enter password" v-model="password">
+                        <input type="password" class="form-control form-control-lg" placeholder="Enter password" v-model="password">
 
                     </div>
                     <div class="error text-danger" v-if="this.errPass">
