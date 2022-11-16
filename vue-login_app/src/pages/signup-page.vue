@@ -1,30 +1,30 @@
 <template>
-    <div class="row">
-        <div class="col-md-4 shadow bg-white">
-            <div>
+    <div class="row container py-5 h-100 d-flex justify-content-center align-items-center">
+        <div class="col-md-4 shadow card text-black">
+            <div class="align-items-center">
                 <div>
-                    <h3>Sign Up</h3>
+                    <h3 class="text-center fw-bold mb-2 text-uppercase" style="color: #0D6EFD;">Sign Up</h3>
                     <hr />
                 </div>
                 <form @submit.prevent="signUp">
-                    <div class="form-group">
-                        <label>Email</label>
+                    <div class="form-outline form-white mb-4">
+                        <label style="color: #0D6EFD;">Email</label>
                         <input type="email" class="form-control" placeholder="Enter email" v-model="email">
 
                     </div>
                     <div class="error text-danger" v-if="this.errMail">
                         {{ this.errMail }}
                     </div>
-                    <div class="form-group">
-                        <label>Password</label>
+                    <div class="form-outline form-white mb-4">
+                        <label style="color: #0D6EFD;">Password</label>
                         <input type="password" class="form-control" placeholder="Enter password" v-model="password">
 
                     </div>
                     <div class="error text-danger" v-if="this.errPass">
                         {{ this.errPass }}
                     </div>
-                    <div class="my-3">
-                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <div class="text-center my-3">
+                        <button type="submit" class="btn-primary btn btn-outline-white btn-lg px-5">Sign Up</button>
                     </div>
                 </form>
             </div>

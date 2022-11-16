@@ -31,7 +31,7 @@
                 </form>
 
                 <div class="mt-2 text-center">
-                    <p class="mb-0">Don't have an account? <a @click="signUp" class="fw-bold">Sign Up</a>
+                    <p class="mb-0">Don't have an account? <a @click="signUp" class="fw-bold" style="cursor: pointer;" >Sign Up</a>
                     </p>
                     <!-- <button type="button" class="btn btn-primary" @click="signUp">Sign Up</button> -->
                 </div>
