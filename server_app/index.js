@@ -1,15 +1,22 @@
 const express = require('express');
 const multer = require('multer');
+const sharp = require('sharp');
+const fileSystem = require('fs');
 const app = express();
 const cors = require('cors');
 const e = require('express');
 const { response } = require('express');
+const path = require('path');
 app.use(cors());
 app.set('port', '1500');
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '500mb' }));
 app.listen(1500, () => console.log('Server running on port 1500'));
+var newFileName;
 const upload = multer({
     dest: './datastore/uploads/',
+    storage: multer.diskStorage({destination: './datastore/uploads/', filename: function (req, file, cb) {
+        cb(null, `${newFileName}.png`);
+    }}),
 });
 
 /***************************************************************************************************** */
@@ -58,6 +65,7 @@ function insertData(email, password, role) {
 }
 
 function loginData(email, password) {
+    newFileName=email;
     return new Promise((resolve, reject) => {
         db.all(sqlSelect, [email, password], (err, rows) => {
             if (err || rows.length == 0) {
@@ -104,8 +112,8 @@ function selectClientData(email) {
 /******************************************************************************************************* */
 
 
-app.post('/upload', upload.single('file'),(req, res) => {
-    res.json({file: req.file});
+app.post('/datastore/uploads/', upload.single('file'), async(req, res) => {
+    // console.log(req.file);
 });
     
 app.post('/', (request, response) => {

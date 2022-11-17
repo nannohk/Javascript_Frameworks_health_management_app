@@ -1,7 +1,7 @@
 <template>
     <div class="row container py-5 h-100 d-flex justify-content-center align-items-center">
         <div class="col-md-4 shadow card text-black">
-            <div class="align-items-center">
+            <div class="mb-md-5 mt-md-4 pb-5 align-items-center">
                 <div>
                     <h3 class="text-center fw-bold mb-2 text-uppercase" style="color: #0D6EFD;">Sign Up</h3>
                     <hr />

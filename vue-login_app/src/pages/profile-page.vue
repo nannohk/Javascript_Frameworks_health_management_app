@@ -1,18 +1,19 @@
 <template>
-<form @submit.prevent="submitIMG" enctype="multipart/form-data" class="section form-group mt-5 shadow col-md-5">
-    <div class="row container">
-        <label for="imageUpload">Upload File</label>
-        <input enctype="multipart/form-data" class="small" type='file' accept=".png, .jpg, .jpeg" @change="onFileSelected" />
-    </div>
-    <div v-if="message" class="alert alert-success" role="alert">
-        {{message}}
-    </div>
-    <div class="field">
-        <button class="btn btn-primary col-3" @click="submitIMG"> Upload Image</button>
-    </div>
-</form>
+    <form @submit.prevent="submitIMG" enctype="multipart/form-data" class="section form-group mt-5 shadow col-md-5">
+        <div class="row container">
+            <label for="imageUpload">Upload File</label>
+            <input enctype="multipart/form-data" class="small" type='file' accept=".png, .jpg, .jpeg"
+                @change="onFileSelected" />
+        </div>
+        <div v-if="message" class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        <div class="field">
+            <button class="btn btn-primary col-3" @click="submitIMG"> Upload Image</button>
+        </div>
+    </form>
 
-<br/>
+    <br />
     <div class="col-md-12  form-group shadow align-items-center mt-5">
         <div class="row col-md-8 form-group ">
             <div>
@@ -62,12 +63,13 @@ export default {
             const formData = new FormData();
             formData.append('file', this.selectedFile);
             formData.append('headers', {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
             });
+
+            formData.append('newFileName', localStorage.getItem('email'));
             try {
-                await axios.post('http://localhost:1500/upload', formData);
+                await axios.post('http://localhost:1500/datastore/uploads/', formData);
                 this.message = 'File uploaded successfully';
-                this.selectedFile='';
             } catch (error) {
                 console.log(error);
             }
@@ -116,7 +118,7 @@ export default {
             address: '',
             license: false,
             gender: '',
-            selectedFile:"",
+            selectedFile: "",
             message: ''
         }
     }
