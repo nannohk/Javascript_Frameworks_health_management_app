@@ -19,7 +19,10 @@
         </thead>
         <tbody>
             <tr v-for="user in users" :key="user.email">
-                <td>{{ user.fullname }}</td>
+                
+                <td>
+                    <output>{{user.fullname}}</output>
+                 </td>
                 <td>{{ user.gender }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.address }}</td>
