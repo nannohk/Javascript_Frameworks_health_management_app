@@ -79,7 +79,7 @@ export default {
             const email = localStorage.getItem('email');
             const profile = {
                 method: 'post',
-                url: 'http://localhost:1500/',
+                url: 'http://localhost:5000/',
                 email: email,
                 fullName: this.fullName,
                 address: this.address, gender: this.gender,
@@ -90,7 +90,7 @@ export default {
                 }
             }
 
-            await axios.post('http://localhost:1500/', profile).then((res) => {
+            await axios.post('http://localhost:5000/updateProfile', profile).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.status);
                     //get the role and detemine the page to direct the user to

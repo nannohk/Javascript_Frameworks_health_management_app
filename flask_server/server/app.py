@@ -26,9 +26,9 @@ def updateData(email, fullname, address, gender, license):
     conn.commit()
     conn.close()
     if cur != None:
-        return {'message': 'profile updated'}
+        return {'message': 'profile updated','status':'success'}
     else:
-        return {'message': 'profile not updated'}
+        return {'message': 'profile not updated','status':'failed'}
 
 def insertData(email, password, role):
     conn = get_db_connection()
