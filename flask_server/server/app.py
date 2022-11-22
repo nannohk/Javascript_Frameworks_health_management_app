@@ -46,9 +46,15 @@ def loginData(email, password):
     cur = conn.cursor()
     cur.execute(sqlSelect, (email, password))
     rows = cur.fetchall()
+    role = ''
+    fullname = ''
+    for row in rows:
+        role = row[2]
+        fullname = row[3]
+
     conn.close()
     if rows != None:
-        return { 'message':rows, 'auth':True}
+        return { 'status':'success','role':role,'fullname':fullname, 'auth':True}
     else:
         return {'message': 'Login failed', 'auth':False}
 
