@@ -21,7 +21,7 @@
             <tr v-for="user in users" :key="user.email">
                 <td>
                     <div class="align-items-center">
-                        <img src='http://localhost:1500/datastore/uploads/{{user.email}}' alt=""
+                        <img src='http://localhost:5000/datastore/uploads/{{user.email}}' alt=""
                             style="width: 20px; height: 20px" class="rounded-circle" />
                     </div>
                     <p class="fw-normal mb-1">{{ user.fullname }}</p>
@@ -81,13 +81,13 @@ export default {
 
             const profile = {
                 method: 'post',
-                url: 'http://localhost:1500/',
+                url: 'http://localhost:5000/',
                 purpose: 'getAdminList',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-            await axios.post('http://localhost:1500/', profile).then((res) => {
+            await axios.post('http://localhost:5000/getAdminList', profile).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.list);
                     this.users = res.data.list;

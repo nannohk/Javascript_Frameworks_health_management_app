@@ -63,7 +63,7 @@ export default {
         async submitLogin() {
             const options = {
                 method: 'post',
-                url: 'http://localhost:1500/',
+                url: 'http://localhost:1500/login',
                 email: this.email,
                 password: this.password,
                 purpose: 'login',
@@ -72,7 +72,7 @@ export default {
                 }
             }
 
-            await axios.post('http://localhost:1500/', options).then((res) => {
+            await axios.post('http://localhost:5000/login', options).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.status);
 

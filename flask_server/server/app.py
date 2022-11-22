@@ -1,13 +1,17 @@
 import sqlite3
 from flask import Flask
+from flask import request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 
 
 # Database section
 # ****************************************************************************
 def get_db_connection():
-    conn = sqlite3.connect('/datastore/database.db')
+    conn = sqlite3.connect('./datastore/database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -66,7 +70,7 @@ def selectClientData(email):
     rows = cur.fetchall()
     conn.close()
     if rows != None:
-        return { 'message':rows}
+        return { 'list':rows,'message':'Display success'}
     else:
         return {'message': 'Failed to obtain user data'}
 
@@ -75,14 +79,50 @@ def selectClientData(email):
 
 
 
-@app.route('/', methods=('POST'))
-def index():
-    title = request.form['title']
-    conn = get_db_connection()
-    conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',(title, content))
-    conn.commit()
-    conn.close()
-    return "Hello World!"
+# @app.route('/', methods=["POST"])
+# def index():
+#     title = data['title']
+#     conn = get_db_connection()
+#     conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',(title, content))
+#     conn.commit()
+#     conn.close()
+#     return "Hello World!"
+
+@app.route('/login', methods=["POST"])
+def login():
+    data = request.get_json()
+    email = data['email']
+    password = data['password']
+    return loginData(email, password)
+
+@app.route('/signUp', methods=["POST"])
+def signUp():
+    data = request.get_json()
+    email = data['email']
+    password = data['password']
+    role = data['role']
+    return insertData(email, password, role)
+
+@app.route('/updateProfile', methods=["POST"])
+def updateProfile():
+    data = request.get_json()
+    email = data['email']
+    fullname = data['fullName']
+    address = data['address']
+    gender = data['gender']
+    license = data['license']
+    return updateData(email, fullname, address, gender, license)
+
+@app.route('/getAdminList', methods=["POST"])
+def getAdminList():
+    return selectAdminList()
+
+@app.route('/getClientData', methods=["POST"])
+def getClientData():
+    data = request.get_json()
+    email = data['email']
+    return selectClientData(email)
+
 
 
 if __name__ == '__main__':

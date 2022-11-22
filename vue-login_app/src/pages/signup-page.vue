@@ -50,7 +50,7 @@ export default {
         async signUp() {
             const options = {
                 method: 'post',
-                url: 'http://localhost:1500/',
+                url: 'http://localhost:5000/signUp',
                 email: this.email,
                 password: this.password,
                 role: 'client',
@@ -60,13 +60,13 @@ export default {
                 }
             }
 
-            await axios.post('http://localhost:1500/', options).then((res) => {
-                if (res.data.status === 'creation success') {
-                    console.log(res.data.status);
+            await axios.post('http://localhost:5000/signUp', options).then((res) => {
+                if (res.data.message === 'user created') {
+                    console.log(res.data.message);
                     localStorage.setItem('email', this.email);
                     router.push('/profile-page');
                 } else {
-                    console.log(res.data.status);
+                    console.log(res.data.message);
                 }
             }).catch((err) => {
                 console.log(err);
