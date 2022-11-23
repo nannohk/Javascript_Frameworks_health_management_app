@@ -87,17 +87,6 @@ def selectClientData(email):
 # End of Database section
 # ****************************************************************************
 
-
-
-# @app.route('/', methods=["POST"])
-# def index():
-#     title = data['title']
-#     conn = get_db_connection()
-#     conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',(title, content))
-#     conn.commit()
-#     conn.close()
-#     return "Hello World!"
-
 @app.route('/login', methods=["POST"])
 def login():
     data = request.get_json()
