@@ -9,6 +9,7 @@
     <table class="table mt-4 align-middle mb-0 bg-white" style="border:black">
         <thead class="bg-light">
             <tr>
+                <th scope="col"></th>
                 <th scope="col">Full Name</th>
                 <th scope="col">Gender</th>
                 <th scope="col">Email</th>
@@ -21,9 +22,12 @@
             <tr v-for="user in users" :key="user.email">
                 <td>
                     <div class="align-items-center">
-                        <img src='http://localhost:5000/datastore/uploads/{{user.email}}' alt=""
-                            style="width: 20px; height: 20px" class="rounded-circle" />
+                        <img src='../assets/test@gmail.com.png' alt=""
+                            style="width: 80px; height: 80px" class="rounded-circle" />
                     </div>
+                </td>
+                <td>
+                    
                     <p class="fw-normal mb-1">{{ user.fullname }}</p>
                 </td>
                 <td>

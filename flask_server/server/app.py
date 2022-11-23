@@ -62,14 +62,12 @@ def loginData(email, password):
 def selectAdminList():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('email,fullname,role,profileImage,address,gender,license from users')
+    cur.execute('select email,fullname,role,profileImage,address,gender,license from users')
     rows = cur.fetchall()
+    rows = [dict(ix) for ix in rows]
     conn.close()
     if rows != None:
-        for row in rows:
-            role = row[2]
-            fullname = row[3]
-        return { 'message':rows}
+        return {'list':rows,'status':'success'}
     else:
         return {'message': 'Failed to obtain all users'}
 
