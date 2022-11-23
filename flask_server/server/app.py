@@ -1,4 +1,5 @@
 import sqlite3
+import json
 from flask import Flask
 from flask import request
 from flask_cors import CORS
@@ -65,6 +66,9 @@ def selectAdminList():
     rows = cur.fetchall()
     conn.close()
     if rows != None:
+        for row in rows:
+            role = row[2]
+            fullname = row[3]
         return { 'message':rows}
     else:
         return {'message': 'Failed to obtain all users'}
@@ -72,11 +76,13 @@ def selectAdminList():
 def selectClientData(email):
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('select email,password,fullname,role,profileImage,address,gender,license from users where email = ?')
+    cur.execute('select email,password,fullname,role,profileImage,address,gender,license from users where email = ?',[email])
     rows = cur.fetchall()
+    #convert to dictionary
+    rows = [dict(ix) for ix in rows]
     conn.close()
     if rows != None:
-        return { 'list':rows,'message':'Display success'}
+        return {'list':rows,'status':'success'}
     else:
         return {'message': 'Failed to obtain user data'}
 

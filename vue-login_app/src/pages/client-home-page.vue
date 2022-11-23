@@ -69,13 +69,13 @@ export default {
             const profile = {
                 method: 'post',
                 email: localStorage.getItem('email'),
-                url: 'http://localhost:1500/',
+                url: 'http://localhost:5000/',
                 purpose: 'getClientData',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-            await axios.post('http://localhost:1500/', profile).then((res) => {
+            await axios.post('http://localhost:5000/getClientData', profile).then((res) => {
                 if (res.data.status === 'success') {
                     this.users = res.data.list;
                     this.profileImage = res.data.list[0].profileImage;
