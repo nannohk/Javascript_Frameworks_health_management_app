@@ -16,6 +16,11 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+# Convert Image files to binary
+def convertToBinaryData(file):
+    binaryData = file.read()
+    return binaryData
+
 sqlInt = 'INSERT INTO users (email, password,role) VALUES(?,?,?)'
 sqlUpdate = 'UPDATE users SET fullname = ?,address=?, gender=?, license=? WHERE email = ?'
 sqlSelect = 'SELECT email, password,role,fullname FROM users WHERE email = ? and password = ?'
@@ -30,6 +35,15 @@ def updateData(email, fullname, address, gender, license):
         return {'message': 'profile updated','status':'success'}
     else:
         return {'message': 'profile not updated','status':'failed'}
+    
+def saveProfile(file,email):
+    convertedFile = convertToBinaryData(file)
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('UPDATE users SET profileImage=? WHERE email = ?', (convertedFile,email))
+    conn.commit()
+    conn.close()
+
 
 def insertData(email, password, role):
     conn = get_db_connection()
@@ -129,7 +143,8 @@ def profileUpload():
     else:
         file = request.files['file']
         email = request.form['newFileName']
-        file.save('./datastore/'+email+'.png')
+        saveProfile(file,email)
+        # file.save('./datastore/'+email+'.png')
         return {'status':'success'}
 
 if __name__ == '__main__':
