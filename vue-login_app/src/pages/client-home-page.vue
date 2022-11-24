@@ -9,6 +9,7 @@
     <table class="table table-striped mt-4">
         <thead>
             <tr>
+                <th></th>
                 <th scope="col">Full Name</th>
                 <th scope="col">Gender</th>
                 <th scope="col">Email</th>
@@ -19,7 +20,12 @@
         </thead>
         <tbody>
             <tr v-for="user in users" :key="user.email">
-                
+                <td>
+                    <div class="align-items-center">
+                        <img src='../assets/test@gmail.com.png' alt=""
+                            style="width: 80px; height: 80px" class="rounded-circle" />
+                    </div>
+                </td>
                 <td>
                     <output>{{user.fullname}}</output>
                  </td>

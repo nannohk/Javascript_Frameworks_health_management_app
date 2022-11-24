@@ -122,7 +122,15 @@ def getClientData():
     email = data['email']
     return selectClientData(email)
 
-
+@app.route('/profileUpload', methods=["POST"])
+def profileUpload():   
+    if 'file' not in request.files:
+        return {'message': 'No file part'}
+    else:
+        file = request.files['file']
+        email = request.form['newFileName']
+        file.save('./datastore/'+email+'.png')
+        return {'status':'success'}
 
 if __name__ == '__main__':
     app.run(debug=True)

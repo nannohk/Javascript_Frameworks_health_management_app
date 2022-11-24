@@ -1,12 +1,16 @@
 <template>
-    <form @submit.prevent="submitIMG" enctype="multipart/form-data" class="section form-group mt-5 shadow col-md-5">
+
+    <form @submit.prevent="submitIMG" enctype="multipart/form-data" class="section form-group mt-5 shadow col-md-5 ">
         <div class="row container">
-            <label for="imageUpload">Upload File</label>
-            <input enctype="multipart/form-data" class="small" type='file' accept=".png, .jpg, .jpeg"
+            <div class="col-form-label col-form-label-lg">
+                   <label for="imageUpload">Upload File</label>
+                <img src='../assets/test@gmail.com.png' alt="" style="width: 80px; height: 80px"
+                    class="rounded-circle" />
+                    <input class="small" type='file' accept=".png, .jpg, .jpeg"
                 @change="onFileSelected" />
-        </div>
-        <div v-if="message" class="alert alert-success" role="alert">
-            {{ message }}
+            </div>
+         
+            
         </div>
         <div class="field">
             <button class="btn btn-primary col-3" @click="submitIMG"> Upload Image</button>
@@ -14,22 +18,22 @@
     </form>
 
     <br />
-    <div class="col-md-12  form-group shadow align-items-center mt-5">
+    <div class="row container py-5 h-100 d-flex justify-content-center align-items-center">
         <div class="row col-md-8 form-group ">
             <div>
                 <h3>Profile</h3>
                 <hr />
             </div>
         </div>
-        <div class="col-12 form-group">
+        <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">Full Name</label>
             <input type="text" class="form-control form-control-lg" placeholder="Enter full name" v-model="fullName" />
         </div>
-        <div class="col-12 form-group">
+        <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">Address</label>
             <input type="text" class="form-control form-control-lg" placeholder="Enter address" v-model="address" />
         </div>
-        <div class="col-12 form-group">
+        <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">What is your gender?</label>
             <select class="form-control" v-model="gender">
                 <option value="male">Male</option>
@@ -37,13 +41,13 @@
                 <option value="other">Other</option>
             </select>
         </div>
-        <div class="col-12 form-group">
+        <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">Do you have a driver's license?</label>
             <input class="form-check-input mt-3" type="checkbox" v-model="license">
         </div>
 
 
-        <div class="col-12 form-group text-center">
+        <div class="col-8 form-group text-center">
             <button class="btn btn-primary btn-md col-4" @click="submitProfile">Submit</button>
         </div>
     </div>
@@ -68,8 +72,9 @@ export default {
 
             formData.append('newFileName', localStorage.getItem('email'));
             try {
-                await axios.post('http://localhost:1500/datastore/uploads/', formData);
+                await axios.post('http://localhost:5000/profileUpload', formData);
                 this.message = 'File uploaded successfully';
+                console.log(this.message);
             } catch (error) {
                 console.log(error);
             }
