@@ -1,5 +1,4 @@
 <template>
-
     <form @submit.prevent="submitIMG" enctype="multipart/form-data" class="section form-group mt-5 shadow col-md-5 ">
         <div class="row container">
             <div class="col-form-label col-form-label-lg">
@@ -10,7 +9,7 @@
                 @change="onFileSelected" />
             </div>
          
-            
+  
         </div>
         <div class="field">
             <button class="btn btn-primary col-3" @click="submitIMG"> Upload Image</button>
@@ -73,8 +72,6 @@ export default {
             formData.append('newFileName', localStorage.getItem('email'));
             try {
                 await axios.post('http://localhost:5000/profileUpload', formData);
-                this.message = 'File uploaded successfully';
-                console.log(this.message);
             } catch (error) {
                 console.log(error);
             }

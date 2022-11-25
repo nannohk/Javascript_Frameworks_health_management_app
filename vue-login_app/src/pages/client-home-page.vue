@@ -1,69 +1,72 @@
 <template>
-    <h1> home</h1>
-    <div class="my-3">
-                    <button type="button" class="btn btn-primary" @click="Profile">Profile</button>
-                </div>
-    <!-- <div>
-        <img class="h-24 w-24 round-full object-cover" src="{{this.imgUrl}}"/>
-    </div> -->
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th></th>
-                <th scope="col">Full Name</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Email</th>
-                <th scope="col">Address</th>
-                <th scope="col">License</th>
-                <th scope="col">Role</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="user in users" :key="user.email">
-                <td>
-                    <div class="align-items-center">
-                        <img src='../assets/test@gmail.com.png' alt=""
-                            style="width: 80px; height: 80px" class="rounded-circle" />
-                    </div>
-                </td>
-                <td>
-                    <output>{{user.fullname}}</output>
-                 </td>
-                <td>{{ user.gender }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.address }}</td>
-                <td v-if="user.license == 1">yes</td>
-                <td v-else>no</td>
-                <td>{{ user.role }}</td>
-            </tr>
+    <div class="my-3 col-md-6 offse-md-3">
+        <button type="button" class="btn btn-primary" @click="Profile">Profile</button> 
+        
+        <button style="margin-left:10%" class="btn btn-primary" @click="SignOut">Sign Out</button>
 
-        </tbody>
-    </table>
+    </div>
 
-    <div class="row">
-        <div class="col-md-6 offse-md-3">
-            <h1>Sign Out!</h1>
-            <button class="btn btn-primary" @click="SignOut">Sign Out</button>
+    <div class="row container py-5  d-flex justify-content-center align-items-center shadow col-md-8">
+
+        <div class="row col-md-8 form-group">
+            <div>
+                <h3>Profile <img v-bind:src="this.imgUrl" alt="" style="margin-left: 20%; height: 100px" class="rounded-circle" /></h3> 
+                <hr />
+            </div>
+        </div>
+
+        <div v-for="user in users" :key="user.email" class="row col-md-8 form-group ">
+            <div class="col-8 form-group ">
+                <label class="col-form-label col-form-label-lg">Full Name</label>
+                <input type="text" class="form-control form-control-lg" placeholder="Enter full name"
+                    :value="user.fullname" />
+            </div>
+            <div class="col-8 form-group">
+                <label class="col-form-label col-form-label-lg">Email</label>
+                <input type="text" class="form-control form-control-lg" placeholder="Enter full name"
+                    :value="user.email" />
+            </div>
+            <div class="col-8 form-group">
+                <label class="col-form-label col-form-label-lg">Address</label>
+                <input type="text" class="form-control form-control-lg" placeholder="Enter full name"
+                    :value="user.address" />
+            </div>
+            <div class="col-8 form-group">
+                <label class="col-form-label col-form-label-lg">Gender</label>
+                <input type="text" class="form-control form-control-lg" placeholder="Enter full name"
+                    :value="user.gender" />
+            </div>
+            <div class="col-8 form-group">
+                <label class="col-form-label col-form-label-lg">Do you have a driver's license?</label>
+                <input class="form-check-input mt-3" type="checkbox" :checked="user.license" />
+            </div>
+            <div class="col-8 form-group">
+                <label class="col-form-label col-form-label-lg">Role</label>
+                <input type="text" class="form-control form-control-lg" placeholder="Enter full name"
+                    :value="user.role" />
+            </div>
         </div>
     </div>
+
+ 
 </template>
 
 <script>
 import router from '@/router';
 import axios from 'axios';
+
 export default {
     data() {
         return {
-            users: [],
-            profileImage:null,
-            imgUrl:'',
+            users: {},
+            imgUrl: '',
         }
     },
     methods: {
         Profile() {
             router.push('/profile-page');
         },
-    
+
         SignOut() {
             localStorage.clear();
             router.push('./login-page');
@@ -83,8 +86,9 @@ export default {
             }
             await axios.post('http://localhost:5000/getClientData', profile).then((res) => {
                 if (res.data.status === 'success') {
-                    this.users = res.data.list;
-                    this.profileImage = res.data.list[0].profileImage;
+                    var list = res.data.list;
+                    this.users = {list};
+                    this.imgUrl = 'data:image/png;base64,' + res.data.list.profileImage;
                 } else {
                     console.log(res.data.status);
                 }
@@ -93,6 +97,7 @@ export default {
             })
 
         }
+
     },
     mounted: function () {
         this.getClientData();

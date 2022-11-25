@@ -1,12 +1,13 @@
 import sqlite3
 import json
+import base64
+from flask import Flask, request, jsonify, render_template, redirect, url_for, send_file
 from flask import Flask
 from flask import request
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-
 
 
 # Database section
@@ -16,14 +17,11 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-# Convert Image files to binary
-def convertToBinaryData(file):
-    binaryData = file.read()
-    return binaryData
 
 sqlInt = 'INSERT INTO users (email, password,role) VALUES(?,?,?)'
 sqlUpdate = 'UPDATE users SET fullname = ?,address=?, gender=?, license=? WHERE email = ?'
 sqlSelect = 'SELECT email, password,role,fullname FROM users WHERE email = ? and password = ?'
+
 
 def updateData(email, fullname, address, gender, license):
     conn = get_db_connection()
@@ -32,15 +30,18 @@ def updateData(email, fullname, address, gender, license):
     conn.commit()
     conn.close()
     if cur != None:
-        return {'message': 'profile updated','status':'success'}
+        return {'message': 'profile updated', 'status': 'success'}
     else:
-        return {'message': 'profile not updated','status':'failed'}
-    
-def saveProfile(file,email):
-    convertedFile = convertToBinaryData(file)
+        return {'message': 'profile not updated', 'status': 'failed'}
+
+
+def saveProfile(file, email):
+    # Convert Image files to binary
+    convertedFile = file.read()
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('UPDATE users SET profileImage=? WHERE email = ?', (convertedFile,email))
+    cur.execute('UPDATE users SET profileImage=? WHERE email = ?',
+                (convertedFile, email))
     conn.commit()
     conn.close()
 
@@ -56,6 +57,7 @@ def insertData(email, password, role):
     else:
         return {'message': 'user not created'}
 
+
 def loginData(email, password):
     conn = get_db_connection()
     cur = conn.cursor()
@@ -69,44 +71,53 @@ def loginData(email, password):
 
     conn.close()
     if rows != None:
-        return { 'status':'success','role':role,'fullname':fullname, 'auth':True}
+        return {'status': 'success', 'role': role, 'fullname': fullname, 'auth': True}
     else:
-        return {'message': 'Login failed', 'auth':False}
+        return {'message': 'Login failed', 'auth': False}
+
 
 def selectAdminList():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('select email,fullname,role,profileImage,address,gender,license from users')
+    cur.execute(
+        'select email,fullname,role,profileImage,address,gender,license from users')
     rows = cur.fetchall()
     rows = [dict(ix) for ix in rows]
     conn.close()
     if rows != None:
-        return {'list':rows,'status':'success'}
+        return {'list': rows, 'status': 'success'}
     else:
         return {'message': 'Failed to obtain all users'}
+
 
 def selectClientData(email):
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('select email,password,fullname,role,profileImage,address,gender,license from users where email = ?',[email])
+    cur.execute(
+        'select email,password,fullname,role,profileImage,address,gender,license from users where email = ?', [email])
     rows = cur.fetchall()
-    #convert to dictionary
-    rows = [dict(ix) for ix in rows]
+    img = rows[0]['profileImage']
+    img = base64.b64encode(img).decode('utf-8')
+    newrow = {'email': rows[0]['email'], 'password': rows[0]['password'], 'fullname': rows[0]['fullname'], 'role': rows[0]
+              ['role'], 'profileImage': img, 'address': rows[0]['address'], 'gender': rows[0]['gender'], 'license': rows[0]['license']}
     conn.close()
     if rows != None:
-        return {'list':rows,'status':'success'}
+        return {'list': newrow, 'status': 'success'}
     else:
         return {'message': 'Failed to obtain user data'}
 
 # End of Database section
 # ****************************************************************************
 
+
+# API section
 @app.route('/login', methods=["POST"])
 def login():
     data = request.get_json()
     email = data['email']
     password = data['password']
     return loginData(email, password)
+
 
 @app.route('/signUp', methods=["POST"])
 def signUp():
@@ -115,6 +126,7 @@ def signUp():
     password = data['password']
     role = data['role']
     return insertData(email, password, role)
+
 
 @app.route('/updateProfile', methods=["POST"])
 def updateProfile():
@@ -126,9 +138,11 @@ def updateProfile():
     license = data['license']
     return updateData(email, fullname, address, gender, license)
 
+
 @app.route('/getAdminList', methods=["POST"])
 def getAdminList():
     return selectAdminList()
+
 
 @app.route('/getClientData', methods=["POST"])
 def getClientData():
@@ -136,16 +150,18 @@ def getClientData():
     email = data['email']
     return selectClientData(email)
 
+
 @app.route('/profileUpload', methods=["POST"])
-def profileUpload():   
+def profileUpload():
     if 'file' not in request.files:
         return {'message': 'No file part'}
     else:
         file = request.files['file']
         email = request.form['newFileName']
-        saveProfile(file,email)
+        saveProfile(file, email)
         # file.save('./datastore/'+email+'.png')
-        return {'status':'success'}
+        return {'status': 'success'}
+
 
 if __name__ == '__main__':
     app.run(debug=True)
