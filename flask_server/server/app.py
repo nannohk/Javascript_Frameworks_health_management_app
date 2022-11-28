@@ -83,9 +83,17 @@ def selectAdminList():
         'select email,fullname,role,profileImage,address,gender,license from users')
     rows = cur.fetchall()
     rows = [dict(ix) for ix in rows]
+    newrows = []
+    for row in rows:
+        img = row['profileImage']
+        if img != None:
+            img = base64.b64encode(img).decode('utf-8')
+        newrows.append({'email': row['email'], 'fullname': row['fullname'], 'role': row['role'], 'profileImage': img, 'address': row,
+                    'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license']})
+
     conn.close()
     if rows != None:
-        return {'list': rows, 'status': 'success'}
+        return {'list':newrows,'status': 'success'}
     else:
         return {'message': 'Failed to obtain all users'}
 

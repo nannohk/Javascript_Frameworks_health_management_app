@@ -1,5 +1,5 @@
 <template>
-        <div class="row">
+    <div class="row">
         <div class="col-md-6 offse-md-3">
             <h1>Sign Out!</h1>
             <button class="btn btn-primary" @click="SignOut">Sign Out</button>
@@ -22,12 +22,12 @@
             <tr v-for="user in users" :key="user.email">
                 <td>
                     <div class="align-items-center">
-                        <img src='../assets/test@gmail.com.png' alt=""
-                            style="width: 80px; height: 80px" class="rounded-circle" />
+                        <img :src=getImgUrl(user) alt="" style="width: 80px; height: 80px"
+                            class="rounded-circle" />
                     </div>
                 </td>
                 <td>
-                    
+
                     <p class="fw-normal mb-1">{{ user.fullname }}</p>
                 </td>
                 <td>
@@ -75,6 +75,14 @@ export default {
         }
     },
     methods: {
+        getImgUrl(person) {
+            if (person.profileImage == null) {
+
+                return 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
+                // return '../assets/whiteBackground.png'
+            }
+            return ('data:image/png;base64,' + person.profileImage);
+        },
         SignOut() {
             localStorage.clear();
             router.push('./login-page');

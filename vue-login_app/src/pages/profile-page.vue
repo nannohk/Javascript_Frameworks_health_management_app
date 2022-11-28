@@ -1,20 +1,18 @@
 <template>
-    <form @submit.prevent="submitIMG" enctype="multipart/form-data" class="section form-group mt-5 shadow col-md-5 ">
-        <div class="row container">
-            <div class="col-form-label col-form-label-lg">
-                   <label for="imageUpload">Upload File</label>
-                <img src='../assets/test@gmail.com.png' alt="" style="width: 80px; height: 80px"
-                    class="rounded-circle" />
-                    <input class="small" type='file' accept=".png, .jpg, .jpeg"
-                @change="onFileSelected" />
+    <div class="row container py-5 h-100 d-flex justify-content-center align-items-center">
+        <form @submit.prevent="submitIMG" enctype="multipart/form-data"
+            class="section form-group mt-5 shadow col-md-5 ">
+            <div class="row container">
+                <div class="col-form-label col-form-label-lg">
+                    <label for="imageUpload">Upload File</label>
+                    <input class="small" type='file' accept=".png, .jpg, .jpeg" @change="onFileSelected" />
+                </div>
             </div>
-         
-  
-        </div>
-        <div class="field">
-            <button class="btn btn-primary col-3" @click="submitIMG"> Upload Image</button>
-        </div>
-    </form>
+            <div class="field">
+                <button class="btn btn-primary col-3" @click="submitIMG"> Upload Image</button>
+            </div>
+        </form>
+    </div>
 
     <br />
     <div class="row container py-5 h-100 d-flex justify-content-center align-items-center">
