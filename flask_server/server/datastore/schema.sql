@@ -1,6 +1,9 @@
+DROP view IF EXISTS `caregiver_list`;
+DROP view IF EXISTS `admin_list`;
 DROP TABLE IF EXISTS "insurance";
 DROP TABLE IF EXISTS "patient";
 DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS "users";
 
 CREATE TABLE "user"(
     email Varchar2(100) PRIMARY KEY,
@@ -43,13 +46,28 @@ CREATE TABLE "insurance"(
 
 
 
--- CREATE view admin_list as
--- select
---     email,
---     fullname,
---     role,
---     gender,
---     address,
---     license
--- from
---     users;
+CREATE view admin_list as
+select
+    email,
+    fullName,
+    role,
+    gender,
+    address,
+    profileImage,
+    gender,
+    license
+from
+    user;
+
+CREATE view caregiver_list as 
+select
+    email,
+    fullName,
+    gender,
+    address,
+    profileImage,
+    license
+from
+    user
+where
+    role = 'caregiver';
