@@ -3,7 +3,6 @@ DROP view IF EXISTS `admin_list`;
 DROP TABLE IF EXISTS "insurance";
 DROP TABLE IF EXISTS "patient";
 DROP TABLE IF EXISTS "user";
-DROP TABLE IF EXISTS "users";
 
 CREATE TABLE "user"(
     email Varchar2(100) PRIMARY KEY,
@@ -13,6 +12,7 @@ CREATE TABLE "user"(
     profileImage blob,
     address varchar2(200),
     gender varchar2(10),
+    phoneNumber varchar2(20),
     license boolean
 );
 
@@ -55,6 +55,7 @@ select
     address,
     profileImage,
     gender,
+    phoneNumber,
     license
 from
     user;
@@ -66,6 +67,7 @@ select
     gender,
     address,
     profileImage,
+    phoneNumber,
     license
 from
     user

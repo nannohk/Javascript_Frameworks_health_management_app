@@ -18,9 +18,9 @@ def get_db_connection():
     return conn
 
 
-sqlInt = 'INSERT INTO users (email, password,role) VALUES(?,?,?)'
-sqlUpdate = 'UPDATE users SET fullname = ?,address=?, gender=?, license=? WHERE email = ?'
-sqlSelect = 'SELECT email, password,role,fullname FROM users WHERE email = ? and password = ?'
+sqlInt = 'INSERT INTO user (email, password,role) VALUES(?,?,?)'
+sqlUpdate = 'UPDATE user SET fullName = ?,address=?, gender=?, license=?,phoneNumber=? WHERE email = ?'
+sqlLoginSelect = 'SELECT email, password,role,fullname FROM user WHERE email = ? and password = ?'
 
 
 def updateData(email, fullname, address, gender, license):
@@ -40,13 +40,13 @@ def saveProfile(file, email):
     convertedFile = file.read()
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('UPDATE users SET profileImage=? WHERE email = ?',
+    cur.execute('UPDATE user SET profileImage=? WHERE email = ?',
                 (convertedFile, email))
     conn.commit()
     conn.close()
 
 
-def insertData(email, password, role):
+def signUpData(email, password, role):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(sqlInt, (email, password, role))
@@ -61,7 +61,7 @@ def insertData(email, password, role):
 def loginData(email, password):
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute(sqlSelect, (email, password))
+    cur.execute(sqlLoginSelect, (email, password))
     rows = cur.fetchall()
     role = ''
     fullname = ''
@@ -80,7 +80,7 @@ def selectAdminList():
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(
-        'select email,fullname,role,profileImage,address,gender,license from users')
+        'select email,fullname,role,profileImage,address,gender,license from user')
     rows = cur.fetchall()
     rows = [dict(ix) for ix in rows]
     newrows = []
@@ -102,7 +102,7 @@ def selectClientData(email):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(
-        'select email,password,fullname,role,profileImage,address,gender,license from users where email = ?', [email])
+        'select email,password,fullname,role,profileImage,address,gender,license from user where email = ?', [email])
     rows = cur.fetchall()
     img = rows[0]['profileImage']
     img = base64.b64encode(img).decode('utf-8')
@@ -133,7 +133,7 @@ def signUp():
     email = data['email']
     password = data['password']
     role = data['role']
-    return insertData(email, password, role)
+    return signUpData(email, password, role)
 
 
 @app.route('/updateProfile', methods=["POST"])

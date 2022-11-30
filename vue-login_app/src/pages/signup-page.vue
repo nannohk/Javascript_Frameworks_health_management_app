@@ -53,7 +53,7 @@ export default {
                 url: 'http://localhost:5000/signUp',
                 email: this.email,
                 password: this.password,
-                role: 'client',
+                role: 'caregiver',
                 purpose: 'signup',
                 headers: {
                     'Content-Type': 'application/json'
