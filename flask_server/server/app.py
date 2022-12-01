@@ -80,7 +80,7 @@ def selectAdminList():
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(
-        'select email,fullname,role,profileImage,address,gender,license from user')
+        'select email,fullName,role,profileImage,address,gender,phoneNumber,license from user')
     rows = cur.fetchall()
     rows = [dict(ix) for ix in rows]
     newrows = []
@@ -88,14 +88,35 @@ def selectAdminList():
         img = row['profileImage']
         if img != None:
             img = base64.b64encode(img).decode('utf-8')
-        newrows.append({'email': row['email'], 'fullname': row['fullname'], 'role': row['role'], 'profileImage': img, 'address': row,
-                    'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license']})
+        newrows.append({'email': row['email'], 'fullname': row['fullName'], 'role': row['role'],
+                    'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license'], 'phoneNumber': row['phoneNumber']})
 
     conn.close()
     if rows != None:
         return {'list':newrows,'status': 'success'}
     else:
         return {'message': 'Failed to obtain all users'}
+
+def selectPatientList():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('select * from patient')
+    # cur.execute('select gender,fullName,address,patientImage,phoneNumber,employer,employerAddress,position,dateOfBirth,caregiverEmail,caregiverName from patient')
+    rows = cur.fetchall()
+    rows = [dict(ix) for ix in rows]
+    newrows = []
+    for row in rows:
+        img = row['patientImage']
+        if img != None:
+            img = base64.b64encode(img).decode('utf-8')
+        newrows.append({'fullname': row['fullName'],'patientImage': img,'address': row['address'], 'gender': row['gender'],
+                         'phoneNumber': row['phoneNumber'],'employer': row['employer'],'employerAddress':row['employerAddress'],'position':row['position'],
+                         'caregiverEmail':row['caregiverEmail'],'caregiverName':['caregiverName'],'dateOfBirth': row['dateOfBirth']})
+    conn.close()
+    if rows != None:
+        return {'list':newrows,'status': 'success'}
+    else:
+        return {'message': 'Failed to obtain all patients'}
 
 
 def selectClientData(email):
@@ -151,6 +172,9 @@ def updateProfile():
 def getAdminList():
     return selectAdminList()
 
+@app.route('/getPatientList', methods=["POST"])
+def getPatientList():
+    return selectPatientList()
 
 @app.route('/getClientData', methods=["POST"])
 def getClientData():

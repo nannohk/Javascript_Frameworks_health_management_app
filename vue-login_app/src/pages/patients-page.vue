@@ -1,9 +1,7 @@
 <template>
     <div class="row">
         <div class="col-md-6 offse-md-3">
-            <h1>Sign Out!</h1>
             <button class="btn btn-primary" @click="SignOut">Sign Out</button> 
-            <button class="btn btn-primary" @click="viewPatients">View Patients</button>
         </div>
     </div>
 
@@ -55,18 +53,6 @@
                 </td>
             </tr>
         </tbody>
-        <!-- <tbody class="d-flex align-items-center">
-            <tr v-for="user in users" :key="user.email">
-                <td>{{ user.fullname }}</td>
-                <td>{{ user.gender }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.address }}</td>
-                <td v-if="user.license == 1">yes</td>
-                <td v-else>no</td>
-                <td>{{ user.role }}</td>
-            </tr>
-
-        </tbody> -->
     </table>
 </template>
 
@@ -84,7 +70,6 @@ export default {
             if (person.profileImage == null) {
 
                 return 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
-                // return '../assets/whiteBackground.png'
             }
             return ('data:image/png;base64,' + person.profileImage);
         },
@@ -93,24 +78,19 @@ export default {
             router.push('./login-page');
         },
 
-        viewPatients() {
-            router.push('./patients-page');
-        }
-        ,
-        async getAdminData() {
+        async getPatientData() {
 
             const profile = {
                 method: 'post',
                 url: 'http://localhost:5000/',
-                purpose: 'getAdminList',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-            await axios.post('http://localhost:5000/getAdminList', profile).then((res) => {
+            await axios.post('http://localhost:5000/getPatientList', profile).then((res) => {
                 if (res.data.status === 'success') {
-                    console.log(res.data.list);
-                    this.users = res.data.list;
+                    console.log(res.data);
+                   // this.users = res.data.list;
                 } else {
                     console.log(res.data.status);
                 }
@@ -121,7 +101,7 @@ export default {
         }
     },
     mounted: function () {
-        this.getAdminData();
+        this.getPatientData();
     }
 }
 

@@ -54,11 +54,24 @@ select
     gender,
     address,
     profileImage,
-    gender,
     phoneNumber,
     license
 from
     user;
+
+CREATE view caregiver_list as 
+select
+    email,
+    fullName,
+    gender,
+    address,
+    profileImage,
+    phoneNumber,
+    license
+from
+    user
+where
+    role = 'caregiver';
 
 CREATE view caregiver_list as 
 select
