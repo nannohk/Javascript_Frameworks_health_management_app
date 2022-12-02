@@ -2,9 +2,12 @@
     <div class="my-3 col-md-6 offse-md-3">
         <button type="button" class="btn btn-primary" @click="Profile">Profile</button>
 
+        <button style="margin-left:10%" class="btn btn-primary" @click="addPatient">Add Patient</button>
+
+        <button class="btn btn-primary" style="margin-left:10%"  @click="viewPatients">My Patients</button>
+
         <button style="margin-left:10%" class="btn btn-primary" @click="SignOut">Sign Out</button>
 
-        <button style="margin-left:10%" class="btn btn-primary" @click="addPatient">Add Patient</button>
 
     </div>
 
@@ -66,6 +69,10 @@ export default {
         }
     },
     methods: {
+        viewPatients() {
+            router.push('./patients-page');
+        },
+        
         addPatient() {
             router.push('/patientForm-page');
         },

@@ -97,6 +97,27 @@ def selectAdminList():
     else:
         return {'message': 'Failed to obtain all users'}
 
+def selectCaregiverList():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        'select email,fullName,role,profileImage,address,gender,phoneNumber,license from user where role = "caregiver"')
+    rows = cur.fetchall()
+    rows = [dict(ix) for ix in rows]
+    newrows = []
+    for row in rows:
+        img = row['profileImage']
+        if img != None:
+            img = base64.b64encode(img).decode('utf-8')
+        newrows.append({'email': row['email'], 'fullname': row['fullName'], 'role': row['role'],
+                    'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license'], 'phoneNumber': row['phoneNumber']})
+
+    conn.close()
+    if rows != None:
+        return {'list':newrows,'status': 'success'}
+    else:
+        return {'message': 'Failed to obtain all users'}
+
 def selectPatientList():
     conn = get_db_connection()
     cur = conn.cursor()
@@ -110,8 +131,7 @@ def selectPatientList():
         if img != None:
             img = base64.b64encode(img).decode('utf-8')
         newrows.append({'fullname': row['fullName'],'patientImage': img,'address': row['address'], 'gender': row['gender'],
-                         'phoneNumber': row['phoneNumber'],'employer': row['employer'],'employerAddress':row['employerAddress'],'position':row['position'],
-                         'caregiverEmail':row['caregiverEmail'],'caregiverName':['caregiverName'],'dateOfBirth': row['dateOfBirth']})
+                         'phoneNumber': row['phoneNumber'],'caregiverEmail':row['caregiverEmail'],'caregiverName':['caregiverName']})
     conn.close()
     if rows != None:
         return {'list':newrows,'status': 'success'}
@@ -172,6 +192,10 @@ def updateProfile():
 @app.route('/getAdminList', methods=["POST"])
 def getAdminList():
     return selectAdminList()
+
+@app.route('/getCaregiverList', methods=["POST"])
+def getCaregiverList():
+    return selectCaregiverList()
 
 @app.route('/getPatientList', methods=["POST"])
 def getPatientList():

@@ -76,6 +76,7 @@ export default {
                 if (res.data.message === 'user created') {
                     console.log(res.data.message);
                     localStorage.setItem('email', this.email);
+                    localStorage.setItem('role', this.role);
                     router.push('/profile-page');
                 } else {
                     console.log(res.data.message);
