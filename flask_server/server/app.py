@@ -18,7 +18,7 @@ def get_db_connection():
     return conn
 
 
-sqlInt = 'INSERT INTO user (email, password,role) VALUES(?,?,?,?)'
+sqlInt = 'INSERT INTO user (email, password,role) VALUES(?,?,?)'
 sqlUpdate = 'UPDATE user SET fullName = ?,address=?, gender=?, license=?,phoneNumber=? WHERE email = ?'
 sqlLoginSelect = 'SELECT email, password,role,fullname FROM user WHERE email = ? and password = ?'
 
@@ -123,12 +123,12 @@ def selectClientData(email):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(
-        'select email,password,fullname,role,profileImage,address,gender,license from user where email = ?', [email])
+        'select email,password,fullname,role,profileImage,address,gender,license,phoneNumber from user where email = ?', [email])
     rows = cur.fetchall()
     img = rows[0]['profileImage']
-    img = base64.b64encode(img).decode('utf-8')
+    # img = base64.b64encode(img).decode('utf-8')
     newrow = {'email': rows[0]['email'], 'password': rows[0]['password'], 'fullname': rows[0]['fullname'], 'role': rows[0]
-              ['role'], 'profileImage': img, 'address': rows[0]['address'], 'gender': rows[0]['gender'], 'license': rows[0]['license']}
+              ['role'], 'phoneNumber':rows[0]['phoneNumber'],'profileImage': img, 'address': rows[0]['address'], 'gender': rows[0]['gender'], 'license': rows[0]['license']}
     conn.close()
     if rows != None:
         return {'list': newrow, 'status': 'success'}

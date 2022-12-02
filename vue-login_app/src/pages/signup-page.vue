@@ -9,7 +9,8 @@
                 <form @submit.prevent="signUp">
                     <div class="form-outline form-white mb-4">
                         <label style="color: #0D6EFD;">Email</label>
-                        <input type="email" class="form-control form-control-lg" placeholder="Enter email" v-model="email">
+                        <input type="email" class="form-control form-control-lg" placeholder="Enter email"
+                            v-model="email">
 
                     </div>
                     <div class="error text-danger" v-if="this.errMail">
@@ -17,12 +18,22 @@
                     </div>
                     <div class="form-outline form-white mb-4">
                         <label style="color: #0D6EFD;">Password</label>
-                        <input type="password" class="form-control form-control-lg" placeholder="Enter password" v-model="password">
+                        <input type="password" class="form-control form-control-lg" placeholder="Enter password"
+                            v-model="password">
 
                     </div>
                     <div class="error text-danger" v-if="this.errPass">
                         {{ this.errPass }}
                     </div>
+
+                    <div class="col-8 form-group">
+                        <label style="color: #0D6EFD;">Role</label>
+                        <select class="form-control" v-model="role">
+                            <option value="manager">Manager</option>
+                            <option value="caregiver">Caregiver</option>
+                        </select>
+                    </div>
+
                     <div class="text-center my-3">
                         <button type="submit" class="btn-primary btn btn-outline-white btn-lg px-5">Sign Up</button>
                     </div>
@@ -41,6 +52,7 @@ export default {
         return {
             email: '',
             password: '',
+            role: '',
             errMail: '',
             errPass: '',
         }
@@ -53,7 +65,7 @@ export default {
                 url: 'http://localhost:5000/signUp',
                 email: this.email,
                 password: this.password,
-                role: 'caregiver',
+                role: this.role,
                 purpose: 'signup',
                 headers: {
                     'Content-Type': 'application/json'

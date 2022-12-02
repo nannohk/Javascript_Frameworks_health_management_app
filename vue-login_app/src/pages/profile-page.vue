@@ -24,7 +24,8 @@
         </div>
         <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">Full Name</label>
-            <input type="text" class="form-control form-control-lg" placeholder="Enter full name" v-model="fullName" />
+            <input type="text" class="form-control form-control-lg" placeholder="Enter full name" v-model="fullName"
+             />
         </div>
         <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">Address</label>
@@ -104,7 +105,7 @@ export default {
                         router.push('/admin-home-page');
 
                     } else {
-                        router.push('/client-home-page');
+                        router.push('/caregiver-home-page');
                     }
                 } else {
                     console.log(res.data.status);
@@ -114,6 +115,35 @@ export default {
             })
 
 
+        },
+        async getClientData() {
+
+            const profile = {
+                method: 'post',
+                email: localStorage.getItem('email'),
+                url: 'http://localhost:5000/',
+                purpose: 'getClientData',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            await axios.post('http://localhost:5000/getClientData', profile).then((res) => {
+                if (res.data.status === 'success') {
+                    var list = res.data.list;
+                    this.user = { list };
+                    this.fullName = list.fullname;
+                    this.address = list.address;
+                    this.license = list.license;
+                    this.phoneNumber = list.phoneNumber;
+                    this.gender = list.gender;
+                    this.imgUrl = 'data:image/png;base64,' + res.data.list.profileImage;
+                } else {
+                    console.log(res.data.status);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+
         }
     },
 
@@ -122,11 +152,17 @@ export default {
             fullName: '',
             address: '',
             license: false,
-            phoneNumber:'',
+            phoneNumber: '000 000 000',
             gender: '',
             selectedFile: "",
-            message: ''
+            message: '',
+            user: {},
+            imgUrl: '',
         }
+    },
+
+    mounted: function () {
+        this.getClientData();
     }
 }
 </script>
