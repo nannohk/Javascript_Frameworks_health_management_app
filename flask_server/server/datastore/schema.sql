@@ -1,3 +1,4 @@
+DROP view IF EXISTS `patient_list`;
 DROP view IF EXISTS `caregiver_list`;
 DROP view IF EXISTS `admin_list`;
 DROP TABLE IF EXISTS "insurance";
@@ -29,6 +30,10 @@ CREATE TABLE "patient"(
     dateOfBirth date,
     caregiverEmail varchar2(100),
     caregiverName varchar2(200),
+    econtactName varchar2(200),
+    econtactAddress varchar2(200),
+    econtactPhoneNumber varchar2(20),
+    econtactRelation varchar2(200),
     foreign key (caregiverEmail) references user(email),
      foreign key (caregiverName) references user(fullName)
 );
@@ -73,16 +78,13 @@ from
 where
     role = 'caregiver';
 
-CREATE view caregiver_list as 
+
+CREATE view patient_list as 
 select
-    email,
     fullName,
     gender,
     address,
-    profileImage,
-    phoneNumber,
-    license
+    caregiverName,
+    caregiverEmail
 from
-    user
-where
-    role = 'caregiver';
+    patient
