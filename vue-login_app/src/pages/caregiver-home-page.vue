@@ -1,8 +1,10 @@
 <template>
     <div class="my-3 col-md-6 offse-md-3">
-        <button type="button" class="btn btn-primary" @click="Profile">Profile</button> 
-        
+        <button type="button" class="btn btn-primary" @click="Profile">Profile</button>
+
         <button style="margin-left:10%" class="btn btn-primary" @click="SignOut">Sign Out</button>
+
+        <button style="margin-left:10%" class="btn btn-primary" @click="addPatient">Add Patient</button>
 
     </div>
 
@@ -10,7 +12,8 @@
 
         <div class="row col-md-8 form-group">
             <div>
-                <h3>Profile <img v-bind:src="this.imgUrl" alt="" style="margin-left: 20%; height: 100px" class="rounded-circle" /></h3> 
+                <h3>Profile <img v-bind:src="this.imgUrl" alt="" style="margin-left: 20%; height: 100px"
+                        class="rounded-circle" /></h3>
                 <hr />
             </div>
         </div>
@@ -48,7 +51,7 @@
         </div>
     </div>
 
- 
+
 </template>
 
 <script>
@@ -63,6 +66,9 @@ export default {
         }
     },
     methods: {
+        addPatient() {
+            router.push('/patientForm-page');
+        },
         Profile() {
             router.push('/profile-page');
         },
@@ -87,8 +93,30 @@ export default {
             await axios.post('http://localhost:5000/getClientData', profile).then((res) => {
                 if (res.data.status === 'success') {
                     var list = res.data.list;
-                    this.users = {list};
+                    this.users = { list };
+                    localStorage.setItem('name', this.users.list.fullname);
                     this.imgUrl = 'data:image/png;base64,' + res.data.list.profileImage;
+                } else {
+                    console.log(res.data.status);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+
+        },
+        async getPatientData() {
+
+            const profile = {
+                method: 'post',
+                url: 'http://localhost:5000/',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            await axios.post('http://localhost:5000/getPatientList', profile).then((res) => {
+                if (res.data.status === 'success') {
+                    console.log(res.data);
+                    // this.users = res.data.list;
                 } else {
                     console.log(res.data.status);
                 }

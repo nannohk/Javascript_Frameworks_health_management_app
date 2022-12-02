@@ -83,13 +83,15 @@ export default {
                     if (res.data.fullname === null) {
                         router.push('/profile-page');
                     } else {
-                        //get the role from the server and detemine the page to direct the user to the right page
+                        //get the role and detemine the page to direct the user to the right page
                         if (res.data.role === 'admin') {
                             router.push('/admin-home-page');
-                        } else {
-                            // router.push('/profile-page');
-                            router.push('/client-home-page');
+                        } else if (res.data.role === 'caregiver') {
+                            router.push('/caregiver-home-page');
+                        } else if (res.data.role === 'manager') {
+                            router.push('/manager-home-page');
                         }
+                            
                     }
                 } else {
                     console.log(res.data.status);

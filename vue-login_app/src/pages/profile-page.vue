@@ -24,8 +24,7 @@
         </div>
         <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">Full Name</label>
-            <input type="text" class="form-control form-control-lg" placeholder="Enter full name" v-model="fullName"
-             />
+            <input type="text" class="form-control form-control-lg" placeholder="Enter full name" v-model="fullName" />
         </div>
         <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">Address</label>
@@ -103,10 +102,12 @@ export default {
                     const role = localStorage.getItem('role');
                     if (role === 'admin') {
                         router.push('/admin-home-page');
-
-                    } else {
+                    } else if (role === 'caregiver') {
                         router.push('/caregiver-home-page');
+                    } else if (role === 'manager') {
+                        router.push('/manager-home-page');
                     }
+
                 } else {
                     console.log(res.data.status);
                 }
