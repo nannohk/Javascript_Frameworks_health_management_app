@@ -18,15 +18,15 @@ def get_db_connection():
     return conn
 
 
-sqlInt = 'INSERT INTO user (email, password,role) VALUES(?,?,?)'
+sqlInt = 'INSERT INTO user (email, password,role) VALUES(?,?,?,?)'
 sqlUpdate = 'UPDATE user SET fullName = ?,address=?, gender=?, license=?,phoneNumber=? WHERE email = ?'
 sqlLoginSelect = 'SELECT email, password,role,fullname FROM user WHERE email = ? and password = ?'
 
 
-def updateData(email, fullname, address, gender, license):
+def updateData(email, fullname, address, gender, license,phoneNumber):
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute(sqlUpdate, (fullname, address, gender, license, email))
+    cur.execute(sqlUpdate, (fullname, address, gender, license, phoneNumber,email))
     conn.commit()
     conn.close()
     if cur != None:
@@ -165,7 +165,8 @@ def updateProfile():
     address = data['address']
     gender = data['gender']
     license = data['license']
-    return updateData(email, fullname, address, gender, license)
+    phoneNumber = data['phoneNumber']
+    return updateData(email, fullname, address, gender, license,phoneNumber)
 
 
 @app.route('/getAdminList', methods=["POST"])

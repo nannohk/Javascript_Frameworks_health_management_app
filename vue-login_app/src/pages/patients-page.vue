@@ -1,78 +1,138 @@
 <template>
-    <div class="row">
-        <div class="col-md-6 offse-md-3">
-            <button class="btn btn-primary" @click="SignOut">Sign Out</button> 
-        </div>
-    </div>
-
-    <table class="table mt-4 align-middle mb-0 bg-white" style="border:black">
-        <thead class="bg-light">
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Full Name</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Email</th>
-                <th scope="col">Address</th>
-                <th scope="col">Phone Number</th>
-                <th scope="col">License</th>
-                <th scope="col">Role</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="user in users" :key="user.email">
-                <td>
-                    <div class="align-items-center">
-                        <img :src=getImgUrl(user) alt="" style="width: 80px; height: 80px"
-                            class="rounded-circle" />
+    <h1>Patient Form</h1>
+    <div class="card">
+        <MDBAccordion v-model="activeItem" flush>
+            <MDBAccordionItem headerTitle="Patient Information" collapseId="patient">
+                <form>
+                    <div class="row">
+                        <div class="col-5">
+                            <label class="col-form-label">Full Name</label>
+                            <input type="text" class="form-control" placeholder="Full Name">
+                        </div>
+                        <div class="col-2">
+                            <label class="col-form-label">Gender</label>
+                            <select class="form-control" v-model="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-3">
+                            <label class="col-form-label">Date of Birth</label>
+                            <input type="text" class="form-control" placeholder="Date of Birth (YYYY-MM-DD)">
+                        </div>
                     </div>
-                </td>
-                <td>
+                    <div class="row">
+                        <div class="form-group col-7">
+                            <label class="col-form-label">Address</label>
+                            <input type="text" class="form-control" placeholder="211B Baker Street London, England">
+                        </div>
+                        <div class="form-group col-3">
+                            <label class="col-form-label">Phone Number</label>
+                            <input type="text" class="form-control" placeholder="506 555 5555">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-2">
+                            <label class="col-form-label">Employer</label>
+                            <input type="text" class="form-control" placeholder="UNB">
+                        </div>
+                        <div class="form-group col-5">
+                            <label class="col-form-label">Employer Address</label>
+                            <input type="text" class="form-control" placeholder="100 Tucker Park Road">
+                        </div>
+                        <div class="form-group col-3">
+                            <label class="col-form-label">Position</label>
+                            <input type="text" class="form-control" placeholder="Professor">
+                        </div>
+                    </div>
+                </form>
+            </MDBAccordionItem>
 
-                    <p class="fw-normal mb-1">{{ user.fullname }}</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1">{{ user.gender }}</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1">{{ user.email }}</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1">{{ user.address }}</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1">{{ user.phoneNumber }}</p>
-                </td>
-                <td v-if="user.license == 1">
-                    <p class="fw-normal mb-1">Yes</p>
-                </td>
-                <td v-else>
-                    <p class="fw-normal mb-1">No</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1">{{ user.role }}</p>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            <MDBAccordionItem headerTitle="Emergency Contact Information" collapseId="emergency">
+                <form>
+                    <div class="row">
+                        <div class="col-8">
+                            <label class="col-form-label">Insurance Company</label>
+                            <input type="text" class="form-control" placeholder="Insurance Company Name">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <label class="col-form-label">Policy Number</label>
+                            <input type="text" class="form-control" placeholder="86464 687815 89846">
+                        </div>
+                        <div class="col-2">
+                            <label class="col-form-label">Group Number</label>
+                            <input type="text" class="form-control" placeholder="1738 5494">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-7">
+                            <label class="col-form-label">Insured Party</label>
+                            <input type="text" class="form-control" placeholder="Insured Party">
+                        </div>
+                        <div class="form-group col-3">
+                            <label class="col-form-label">Relationship</label>
+                            <input type="text" class="form-control" placeholder="Brother/Sister/...">
+                        </div>
+                    </div>
+                </form>
+            </MDBAccordionItem>
+            <MDBAccordionItem headerTitle="Insurance" collapseId="insurance">
+                <form>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label">Insurance Company</label>
+                            <input type="text" class="form-control" placeholder="Insurance Company Name">
+                        </div>
+                        <div class="form-group col">
+                            <label class="col-form-label">Insured Party</label>
+                            <input type="text" class="form-control" placeholder="Insured Party">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label">Policy Number</label>
+                            <input type="text" class="form-control" placeholder="86464 687815 89846">
+                        </div>
+                        <div class="col">
+                            <label class="col-form-label">Group Number</label>
+                            <input type="text" class="form-control" placeholder="1738 5494">
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col">
+                            <label class="col-form-label">Relationship</label>
+                            <input type="text" class="form-control" placeholder="Brother/Sister/...">
+                        </div>
+                    </div>
+                </form>
+            </MDBAccordionItem>
+        </MDBAccordion>
+    </div>
 </template>
 
 <script>
 import router from '@/router';
 import axios from 'axios';
+import { MDBAccordion, MDBAccordionItem } from "mdb-vue-ui-kit";
+import { ref } from "vue";
+
 export default {
+    components: {
+        MDBAccordion,
+        MDBAccordionItem
+    },
+
     data() {
         return {
-            users: []
+            users: [],
+            activeItem: ref('insurance')
         }
     },
     methods: {
-        getImgUrl(person) {
-            if (person.profileImage == null) {
-
-                return 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
-            }
-            return ('data:image/png;base64,' + person.profileImage);
-        },
         SignOut() {
             localStorage.clear();
             router.push('./login-page');
@@ -90,7 +150,7 @@ export default {
             await axios.post('http://localhost:5000/getPatientList', profile).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data);
-                   // this.users = res.data.list;
+                    // this.users = res.data.list;
                 } else {
                     console.log(res.data.status);
                 }

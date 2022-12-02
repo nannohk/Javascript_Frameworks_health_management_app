@@ -31,6 +31,10 @@
             <input type="text" class="form-control form-control-lg" placeholder="Enter address" v-model="address" />
         </div>
         <div class="col-8 form-group">
+            <label class="col-form-label col-form-label-lg">Phone Number</label>
+            <input type="phone" class="form-control form-control-lg" placeholder="555 555 5555" v-model="phoneNumber" />
+        </div>
+        <div class="col-8 form-group">
             <label class="col-form-label col-form-label-lg">What is your gender?</label>
             <select class="form-control" v-model="gender">
                 <option value="male">Male</option>
@@ -84,6 +88,7 @@ export default {
                 fullName: this.fullName,
                 address: this.address, gender: this.gender,
                 license: this.license,
+                phoneNumber: this.phoneNumber,
                 purpose: 'profileUpdate',
                 headers: {
                     'Content-Type': 'application/json, multipart/form-data'
@@ -117,6 +122,7 @@ export default {
             fullName: '',
             address: '',
             license: false,
+            phoneNumber:'',
             gender: '',
             selectedFile: "",
             message: ''

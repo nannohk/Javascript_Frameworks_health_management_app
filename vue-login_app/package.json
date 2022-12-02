@@ -12,6 +12,7 @@
     "blob-util": "^2.0.2",
     "core-js": "^3.8.3",
     "install": "^0.13.0",
+    "mdb-vue-ui-kit": "^3.1.1",
     "path-browserify": "^1.0.1",
     "save": "^2.9.0",
     "sqlite3": "^5.1.2",
