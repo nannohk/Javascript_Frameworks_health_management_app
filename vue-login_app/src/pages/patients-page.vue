@@ -95,7 +95,7 @@ export default {
                     'Content-Type': 'application/json'
                 }
             }
-            await axios.post('http://localhost:5000/getCaregiverList', profile).then((res) => {
+            await axios.post('http://localhost:5000/getPatientList', profile).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.list);
                     this.users = res.data.list;

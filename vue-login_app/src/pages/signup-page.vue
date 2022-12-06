@@ -26,13 +26,13 @@
                         {{ this.errPass }}
                     </div>
 
-                    <div class="col-8 form-group">
+                    <!-- <div class="col-8 form-group">
                         <label style="color: #0D6EFD;">Role</label>
                         <select class="form-control" v-model="role">
                             <option value="manager">Manager</option>
                             <option value="caregiver">Caregiver</option>
                         </select>
-                    </div>
+                    </div> -->
 
                     <div class="text-center my-3">
                         <button type="submit" class="btn-primary btn btn-outline-white btn-lg px-5">Sign Up</button>
@@ -65,7 +65,7 @@ export default {
                 url: 'http://localhost:5000/signUp',
                 email: this.email,
                 password: this.password,
-                role: this.role,
+                role: 'caregiver',
                 purpose: 'signup',
                 headers: {
                     'Content-Type': 'application/json'

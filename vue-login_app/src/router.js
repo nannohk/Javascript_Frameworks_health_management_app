@@ -6,7 +6,8 @@ import ManagerHome from "./pages/manager-home-page.vue";
 import Profile from "./pages/profile-page.vue";
 import SignUp from "./pages/signup-page.vue";
 import IndexPage from "./pages/index-page.vue";
-import PatientPage from "./pages/patientForm-page.vue";
+import patientForm from "./pages/patientForm-page.vue";
+import patientsPage from "./pages/patients-page.vue";
 
 const routes = [
     { path: '/login-page', component: Login, meta: { auth: false } },
@@ -16,7 +17,8 @@ const routes = [
     { path: '/profile-page', component: Profile, meta: { auth: true } },
     { path: '/signup-page', component: SignUp, meta: { auth: false } },
     {path: '/index-page', component: IndexPage, meta: { auth: true } },
-    {path: '/patientForm-page', component: PatientPage, meta: { auth: true } },
+    {path: '/patientForm-page', component: patientForm, meta: { auth: true } },
+    {path: '/patients-page', component: patientsPage, meta: { auth: true } },
     { path: '/', redirect: '/login-page' },
 ];
 

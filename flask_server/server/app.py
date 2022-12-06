@@ -23,10 +23,31 @@ sqlUpdate = 'UPDATE user SET fullName = ?,address=?, gender=?, license=?,phoneNu
 sqlLoginSelect = 'SELECT email, password,role,fullname FROM user WHERE email = ? and password = ?'
 
 
-def updateData(email, fullname, address, gender, license,phoneNumber):
+def signUpPatient(fullName, gender, address, patientImage, phoneNumber, employer, employerAddress, position, dateOfBirth,
+                  caregiverEmail, caregiverName, econtactName, econtactRelation, econtactAddress, econtactPhoneNumber,
+                  insuranceCompany, insuredParty, policyNumber, groupNumber, relationship):
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute(sqlUpdate, (fullname, address, gender, license, phoneNumber,email))
+    # cur.execute('INSERT INTO patient (fullName,gender,address,patientImage,phoneNumber,employer,employerAddress,position,dateOfBirth,caregiverEmail,caregiverName,econtactName,econtactRelation,econtactAddress,econtactPhoneNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    # (fullName, gender, address, patientImage, phoneNumber, employer, employerAddress, position, dateOfBirth,caregiverEmail, caregiverName, econtactName, econtactRelation, econtactAddress, econtactPhoneNumber))
+    # conn.commit()
+    patientId = cur.execute('select id from patient where fullName=? AND address=? AND phoneNumber=?', (fullName, address, phoneNumber))
+    patientId =patientId.fetchall()
+    patientId = patientId[0][0]
+    cur.execute('INSERT INTO insurance (patientId,insuranceCompany,insuredParty,policyNumber,groupNumber,relationship) VALUES(?,?,?,?,?,?)',(patientId,insuranceCompany, insuredParty, policyNumber, groupNumber, relationship))
+    conn.commit()
+    conn.close()
+    if cur != None:
+        return {'message': 'Patient created'}
+    else:
+        return {'message': 'Patient not created'}
+
+
+def updateData(email, fullname, address, gender, license, phoneNumber):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(sqlUpdate, (fullname, address,
+                gender, license, phoneNumber, email))
     conn.commit()
     conn.close()
     if cur != None:
@@ -89,13 +110,14 @@ def selectAdminList():
         if img != None:
             img = base64.b64encode(img).decode('utf-8')
         newrows.append({'email': row['email'], 'fullname': row['fullName'], 'role': row['role'],
-                    'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license'], 'phoneNumber': row['phoneNumber']})
+                        'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license'], 'phoneNumber': row['phoneNumber']})
 
     conn.close()
     if rows != None:
-        return {'list':newrows,'status': 'success'}
+        return {'list': newrows, 'status': 'success'}
     else:
         return {'message': 'Failed to obtain all users'}
+
 
 def selectCaregiverList():
     conn = get_db_connection()
@@ -110,13 +132,14 @@ def selectCaregiverList():
         if img != None:
             img = base64.b64encode(img).decode('utf-8')
         newrows.append({'email': row['email'], 'fullname': row['fullName'], 'role': row['role'],
-                    'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license'], 'phoneNumber': row['phoneNumber']})
+                        'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license'], 'phoneNumber': row['phoneNumber']})
 
     conn.close()
     if rows != None:
-        return {'list':newrows,'status': 'success'}
+        return {'list': newrows, 'status': 'success'}
     else:
         return {'message': 'Failed to obtain all users'}
+
 
 def selectPatientList():
     conn = get_db_connection()
@@ -130,11 +153,11 @@ def selectPatientList():
         img = row['patientImage']
         if img != None:
             img = base64.b64encode(img).decode('utf-8')
-        newrows.append({'fullname': row['fullName'],'patientImage': img,'address': row['address'], 'gender': row['gender'],
-                         'phoneNumber': row['phoneNumber'],'caregiverEmail':row['caregiverEmail'],'caregiverName':['caregiverName']})
+        newrows.append({'fullname': row['fullName'], 'patientImage': img, 'address': row['address'], 'gender': row['gender'],
+                        'phoneNumber': row['phoneNumber'], 'caregiverEmail': row['caregiverEmail'], 'caregiverName': ['caregiverName']})
     conn.close()
     if rows != None:
-        return {'list':newrows,'status': 'success'}
+        return {'list': newrows, 'status': 'success'}
     else:
         return {'message': 'Failed to obtain all patients'}
 
@@ -148,7 +171,7 @@ def selectClientData(email):
     img = rows[0]['profileImage']
     # img = base64.b64encode(img).decode('utf-8')
     newrow = {'email': rows[0]['email'], 'password': rows[0]['password'], 'fullname': rows[0]['fullname'], 'role': rows[0]
-              ['role'], 'phoneNumber':rows[0]['phoneNumber'],'profileImage': img, 'address': rows[0]['address'], 'gender': rows[0]['gender'], 'license': rows[0]['license']}
+              ['role'], 'phoneNumber': rows[0]['phoneNumber'], 'profileImage': img, 'address': rows[0]['address'], 'gender': rows[0]['gender'], 'license': rows[0]['license']}
     conn.close()
     if rows != None:
         return {'list': newrow, 'status': 'success'}
@@ -186,20 +209,23 @@ def updateProfile():
     gender = data['gender']
     license = data['license']
     phoneNumber = data['phoneNumber']
-    return updateData(email, fullname, address, gender, license,phoneNumber)
+    return updateData(email, fullname, address, gender, license, phoneNumber)
 
 
 @app.route('/getAdminList', methods=["POST"])
 def getAdminList():
     return selectAdminList()
 
+
 @app.route('/getCaregiverList', methods=["POST"])
 def getCaregiverList():
     return selectCaregiverList()
 
+
 @app.route('/getPatientList', methods=["POST"])
 def getPatientList():
     return selectPatientList()
+
 
 @app.route('/getClientData', methods=["POST"])
 def getClientData():
@@ -218,6 +244,35 @@ def profileUpload():
         saveProfile(file, email)
         # file.save('./datastore/'+email+'.png')
         return {'status': 'success'}
+
+
+@app.route('/addPatient', methods=["POST"])
+def addPatient():
+    data = request.get_json()
+    print(data)
+    fullName = data['fullName']
+    gender = data['gender']
+    address = data['address']
+    patientImage = data['patientImage']
+    phoneNumber = data['phoneNumber']
+    employer = data['employer']
+    employerAddress = data['employerAddress']
+    position = data['position']
+    dateOfBirth = data['dateOfBirth']
+    caregiverEmail = data['caregiverEmail']
+    caregiverName = data['caregiverName']
+    econtactName = data['econtactName']
+    econtactRelation = data['econtactRelation']
+    econtactAddress = data['econtactAddress']
+    econtactPhoneNumber = data['econtactPhoneNumber']
+    insuranceCompany = data['insuranceCompany']
+    insuredParty = data['insuredParty']
+    policyNumber = data['policyNumber']
+    groupNumber = data['groupNumber']
+    relationship = data['relationship']
+    return signUpPatient(fullName, gender, address, patientImage, phoneNumber, employer, employerAddress, position, dateOfBirth,
+                         caregiverEmail, caregiverName, econtactName, econtactRelation, econtactAddress, econtactPhoneNumber,
+                         insuranceCompany, insuredParty, policyNumber, groupNumber, relationship)
 
 
 if __name__ == '__main__':
