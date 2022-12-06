@@ -151,8 +151,8 @@ def selectPatientList():
     newrows = []
     for row in rows:
         img = row['patientImage']
-        if img != None:
-            img = base64.b64encode(img).decode('utf-8')
+        # if img != None:
+        #     img = base64.b64encode(img).decode('utf-8')
         newrows.append({'fullname': row['fullName'], 'patientImage': img, 'address': row['address'], 'gender': row['gender'],
                         'phoneNumber': row['phoneNumber'], 'caregiverEmail': row['caregiverEmail'], 'caregiverName': ['caregiverName']})
     conn.close()
