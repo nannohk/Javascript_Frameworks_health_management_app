@@ -77,7 +77,7 @@ export default {
                     console.log(res.data.message);
                     localStorage.setItem('email', this.email);
                     localStorage.setItem('role', this.role);
-                    router.push('/profile-page');
+                    router.push('/login-page');
                 } else {
                     console.log(res.data.message);
                 }

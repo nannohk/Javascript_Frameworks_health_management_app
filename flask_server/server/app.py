@@ -28,19 +28,20 @@ def signUpPatient(fullName, gender, address, patientImage, phoneNumber, employer
                   insuranceCompany, insuredParty, policyNumber, groupNumber, relationship):
     conn = get_db_connection()
     cur = conn.cursor()
-    # cur.execute('INSERT INTO patient (fullName,gender,address,patientImage,phoneNumber,employer,employerAddress,position,dateOfBirth,caregiverEmail,caregiverName,econtactName,econtactRelation,econtactAddress,econtactPhoneNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-    # (fullName, gender, address, patientImage, phoneNumber, employer, employerAddress, position, dateOfBirth,caregiverEmail, caregiverName, econtactName, econtactRelation, econtactAddress, econtactPhoneNumber))
-    # conn.commit()
+    cur.execute('INSERT INTO patient (fullName,gender,address,patientImage,phoneNumber,employer,employerAddress,position,dateOfBirth,caregiverEmail,caregiverName,econtactName,econtactRelation,econtactAddress,econtactPhoneNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    (fullName, gender, address, patientImage, phoneNumber, employer, employerAddress, position, dateOfBirth,caregiverEmail, caregiverName, econtactName, econtactRelation, econtactAddress, econtactPhoneNumber))
+    conn.commit()
     patientId = cur.execute('select id from patient where fullName=? AND address=? AND phoneNumber=?', (fullName, address, phoneNumber))
     patientId =patientId.fetchall()
     patientId = patientId[0][0]
     cur.execute('INSERT INTO insurance (patientId,insuranceCompany,insuredParty,policyNumber,groupNumber,relationship) VALUES(?,?,?,?,?,?)',(patientId,insuranceCompany, insuredParty, policyNumber, groupNumber, relationship))
     conn.commit()
     conn.close()
+
     if cur != None:
-        return {'message': 'Patient created'}
+        return {'status': 'success'}
     else:
-        return {'message': 'Patient not created'}
+        return {'status': 'Patient not created'}
 
 
 def updateData(email, fullname, address, gender, license, phoneNumber):
@@ -161,16 +162,35 @@ def selectPatientList():
     else:
         return {'message': 'Failed to obtain all patients'}
 
+def selectMyPatients(email):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('select fullName,patientImage,address,gender,phoneNumber from patient where caregiverEmail = ?',[email])
+    # cur.execute('select gender,fullName,address,patientImage,phoneNumber,employer,employerAddress,position,dateOfBirth,caregiverEmail,caregiverName from patient')
+    rows = cur.fetchall()
+    rows = [dict(ix) for ix in rows]
+    newrows = []
+    for row in rows:
+        img = row['patientImage']
+        # if img != None:
+        #     img = base64.b64encode(img).decode('utf-8')
+        newrows.append({'fullname': row['fullName'], 'patientImage': img, 'address': row['address'], 'gender': row['gender'],
+                        'phoneNumber': row['phoneNumber']})
+    conn.close()
+    if rows != None:
+        return {'list': newrows, 'status': 'success'}
+    else:
+        return {'message': 'Failed to obtain all patients'}
 
 def selectClientData(email):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(
-        'select email,password,fullname,role,profileImage,address,gender,license,phoneNumber from user where email = ?', [email])
+        'select email,fullname,role,profileImage,address,gender,license,phoneNumber from user where email = ?', [email])
     rows = cur.fetchall()
     img = rows[0]['profileImage']
     # img = base64.b64encode(img).decode('utf-8')
-    newrow = {'email': rows[0]['email'], 'password': rows[0]['password'], 'fullname': rows[0]['fullname'], 'role': rows[0]
+    newrow = {'email': rows[0]['email'], 'fullname': rows[0]['fullname'], 'role': rows[0]
               ['role'], 'phoneNumber': rows[0]['phoneNumber'], 'profileImage': img, 'address': rows[0]['address'], 'gender': rows[0]['gender'], 'license': rows[0]['license']}
     conn.close()
     if rows != None:
@@ -233,6 +253,11 @@ def getClientData():
     email = data['email']
     return selectClientData(email)
 
+@app.route('/getMyPatients', methods=["POST"])
+def getMyPatients():
+    data = request.get_json()
+    email = data['email']
+    return selectMyPatients(email)
 
 @app.route('/profileUpload', methods=["POST"])
 def profileUpload():
@@ -249,7 +274,6 @@ def profileUpload():
 @app.route('/addPatient', methods=["POST"])
 def addPatient():
     data = request.get_json()
-    print(data)
     fullName = data['fullName']
     gender = data['gender']
     address = data['address']

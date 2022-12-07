@@ -209,6 +209,7 @@ export default {
             await axios.post('http://localhost:5000/addPatient', patientProfile).then((res) => {
                 if (res.data.status === 'success') {
                     console.log(res.data.status);
+                    console.log(res);
                     //get the role and detemine the page to direct the user to
                     const role = localStorage.getItem('role');
                     if (role === 'admin') {

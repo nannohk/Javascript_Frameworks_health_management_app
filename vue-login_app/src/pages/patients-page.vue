@@ -1,9 +1,9 @@
 <template>
-    <div class="row">
-        <div class="col-md-6 offse-md-3">
-            <h1>Sign Out!</h1>
-            <button class="btn btn-primary" @click="SignOut">Sign Out</button> 
-            <button class="btn btn-primary" @click="viewPatients">View Patients</button>
+    <div class="row mt-3">
+        <div class="col-md-6 offset-md-9">
+            <button class="btn btn-primary" @click="Home">Home</button>
+            <button class="btn btn-primary" @click="SignOut" style="margin-left:10%">Sign Out</button> 
+            
         </div>
     </div>
 
@@ -81,8 +81,14 @@ export default {
             router.push('./login-page');
         },
 
-        viewPatients() {
-            router.push('./patients-page');
+        Home() {
+            if (localStorage.getItem('role') == 'admin') {
+                router.push('./admin-home-page');
+            } else if (localStorage.getItem('role') == 'manager') {
+                router.push('./manager-home-page');
+            } else if (localStorage.getItem('role') == 'caregiver') {
+                router.push('./caregiver-home-page');
+            }
         }
         ,
         async getAdminData() {

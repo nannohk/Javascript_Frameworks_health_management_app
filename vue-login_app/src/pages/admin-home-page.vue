@@ -1,9 +1,10 @@
 <template>
-    <div class="row">
-        <div class="col-md-6 offse-md-3">
-            <h1>Sign Out!</h1>
-            <button class="btn btn-primary" @click="SignOut">Sign Out</button> 
-            <button class="btn btn-primary" @click="viewPatients">View Patients</button>
+    <div class="row mt-3">
+        <div class="col-md-6 offset-md-8">
+            <button class="btn btn-primary"  @click="viewPatients">View Patients</button>
+            <button class="btn btn-primary" @click="viewProfile" style="margin-left:1%">Profile</button> 
+            <button class="btn btn-primary" @click="addCaregiver" style="margin-left:1%">Add Caregiver</button> 
+            <button class="btn btn-primary" @click="SignOut" style="margin-left:1%">Sign Out</button> 
         </div>
     </div>
 
@@ -55,18 +56,6 @@
                 </td>
             </tr>
         </tbody>
-        <!-- <tbody class="d-flex align-items-center">
-            <tr v-for="user in users" :key="user.email">
-                <td>{{ user.fullname }}</td>
-                <td>{{ user.gender }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.address }}</td>
-                <td v-if="user.license == 1">yes</td>
-                <td v-else>no</td>
-                <td>{{ user.role }}</td>
-            </tr>
-
-        </tbody> -->
     </table>
 </template>
 
@@ -93,8 +82,15 @@ export default {
             router.push('./login-page');
         },
 
+        addCaregiver() {
+            router.push('./signup-page');
+        },
+
         viewPatients() {
             router.push('./patients-page');
+        },
+        viewProfile() {
+            router.push('./profile-page');
         }
         ,
         async getAdminData() {
