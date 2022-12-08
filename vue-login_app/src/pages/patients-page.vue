@@ -16,8 +16,8 @@
                 <th scope="col">Email</th>
                 <th scope="col">Address</th>
                 <th scope="col">Phone Number</th>
-                <th scope="col">License</th>
-                <th scope="col">Role</th>
+                <th scope="col">Caregiver</th>
+                <th scope="col">Caregiver Email</th>
             </tr>
         </thead>
         <tbody>
@@ -44,14 +44,11 @@
                 <td>
                     <p class="fw-normal mb-1">{{ user.phoneNumber }}</p>
                 </td>
-                <td v-if="user.license == 1">
-                    <p class="fw-normal mb-1">Yes</p>
-                </td>
-                <td v-else>
-                    <p class="fw-normal mb-1">No</p>
-                </td>
+              <td>
+                <p class="fw-normal mb-1">{{ user.caregiverName }}</p>
+              </td>
                 <td>
-                    <p class="fw-normal mb-1">{{ user.role }}</p>
+                    <p class="fw-normal mb-1">{{ user.caregiverEmail }}</p>
                 </td>
             </tr>
         </tbody>

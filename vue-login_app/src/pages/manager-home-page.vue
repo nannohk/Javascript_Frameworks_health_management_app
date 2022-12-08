@@ -1,9 +1,9 @@
 <template>
-    <div class="row">
-        <div class="col-md-6 offse-md-3">
-            <h1>Sign Out!</h1>
-            <button class="btn btn-primary" @click="SignOut">Sign Out</button> 
-            <button class="btn btn-primary" @click="viewPatients">View Patients</button>
+    <div class="row mt-3">
+        <div class="col-md-6 offset-md-9">
+            <button class="btn btn-primary"  @click="viewPatients">View Patients</button>
+            <button class="btn btn-primary" @click="viewProfile" style="margin-left:1%">Profile</button> 
+            <button class="btn btn-primary" @click="SignOut" style="margin-left:1%">Sign Out</button> 
         </div>
     </div>
 
@@ -79,6 +79,9 @@ export default {
         SignOut() {
             localStorage.clear();
             router.push('./login-page');
+        },
+        viewProfile() {
+            router.push('./profile-page');
         },
 
         viewPatients() {
