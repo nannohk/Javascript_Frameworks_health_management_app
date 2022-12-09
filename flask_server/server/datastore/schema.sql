@@ -1,6 +1,6 @@
 DROP view IF EXISTS `patient_list`;
 DROP view IF EXISTS `caregiver_list`;
-DROP view IF EXISTS `admin_list`;
+-- DROP view IF EXISTS `admin_list`;
 DROP TABLE IF EXISTS "insurance";
 DROP TABLE IF EXISTS "patient";
 DROP TABLE IF EXISTS "user";

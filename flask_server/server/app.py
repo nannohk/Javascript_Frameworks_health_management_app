@@ -66,6 +66,10 @@ def saveProfile(file, email):
                 (convertedFile, email))
     conn.commit()
     conn.close()
+    if cur != None:
+        return {'message': 'profile image updated', 'status': 'success'}
+    else:   
+        return {'message': 'profile image not updated', 'status': 'failed'}
 
 
 def signUpData(email, password, role):
@@ -130,8 +134,8 @@ def selectCaregiverList():
     newrows = []
     for row in rows:
         img = row['profileImage']
-        if img != None:
-            img = base64.b64encode(img).decode('utf-8')
+    # if img != None | type(img) == bytes:
+        #     img = base64.b64encode(img).decode('utf-8')
         newrows.append({'email': row['email'], 'fullname': row['fullName'], 'role': row['role'],
                         'profileImage': img, 'address': row['address'], 'gender': row['gender'], 'license': row['license'], 'phoneNumber': row['phoneNumber']})
 
@@ -152,7 +156,7 @@ def selectPatientList():
     newrows = []
     for row in rows:
         img = row['patientImage']
-        # if img != None:
+    # if img != None:
         #     img = base64.b64encode(img).decode('utf-8')
         newrows.append({'fullname': row['fullName'], 'patientImage': img, 'address': row['address'], 'gender': row['gender'],
                         'phoneNumber': row['phoneNumber'], 'caregiverEmail': row['caregiverEmail'], 'caregiverName': row['caregiverName']})
@@ -189,7 +193,8 @@ def selectClientData(email):
         'select email,fullname,role,profileImage,address,gender,license,phoneNumber from user where email = ?', [email])
     rows = cur.fetchall()
     img = rows[0]['profileImage']
-    # img = base64.b64encode(img).decode('utf-8')
+    if img != None:
+        img = base64.b64encode(img).decode('utf-8')
     newrow = {'email': rows[0]['email'], 'fullname': rows[0]['fullname'], 'role': rows[0]
               ['role'], 'phoneNumber': rows[0]['phoneNumber'], 'profileImage': img, 'address': rows[0]['address'], 'gender': rows[0]['gender'], 'license': rows[0]['license']}
     conn.close()
@@ -266,9 +271,8 @@ def profileUpload():
     else:
         file = request.files['file']
         email = request.form['newFileName']
-        saveProfile(file, email)
+        return saveProfile(file, email)
         # file.save('./datastore/'+email+'.png')
-        return {'status': 'success'}
 
 
 @app.route('/addPatient', methods=["POST"])

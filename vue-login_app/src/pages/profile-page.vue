@@ -1,15 +1,19 @@
 <template>
-        <div class="row mt-3">
+    <div class="row mt-3">
         <div class="col-md-6 offset-md-8">
-            <button class="btn btn-primary"  @click="Home">Home</button>
-            <button class="btn btn-primary" @click="SignOut" style="margin-left:1%">Sign Out</button> 
+            <button class="btn btn-primary" @click="Home">Home</button>
+            <button class="btn btn-primary" @click="SignOut" style="margin-left:1%">Sign Out</button>
         </div>
     </div>
 
     <div class="row container py-5 h-100 d-flex justify-content-center align-items-center">
         <div class="row col-md-8 form-group ">
             <div>
+                <div class="align-items-center">
+                    <img :src=getImgUrl() alt="" style="width: 80px; height: 80px" class="rounded-circle" />
+                </div>
                 <h3>Profile</h3>
+
                 <hr />
             </div>
         </div>
@@ -67,6 +71,13 @@ import axios from 'axios';
 
 export default {
     methods: {
+        getImgUrl() {
+            if (this.imgUrl == null) {
+
+                return 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
+            }
+            return ('data:image/png;base64,' + this.imgUrl);
+        },
         SignOut() {
             localStorage.clear();
             router.push('./login-page');
@@ -156,10 +167,15 @@ export default {
                     this.user = { list };
                     this.fullName = list.fullname;
                     this.address = list.address;
-                    this.license = list.license;
+                    if (list.license == 1) {
+                        this.license = true;
+                    } else
+                    {
+                        this.license = false;
+                    }
                     this.phoneNumber = list.phoneNumber;
                     this.gender = list.gender;
-                    this.imgUrl = 'data:image/png;base64,' + res.data.list.profileImage;
+                    this.imgUrl = res.data.list.profileImage;
                 } else {
                     console.log(res.data.status);
                 }

@@ -11,7 +11,7 @@
             <h1 style="color: #0D6EFD;">Patient Information</h1>
             <hr />
         </div>
-        <form @submit.prevent="addPatient">
+        <form @submit.prevent="">
             <div class="card">
                 <MDBAccordion v-model="activeItem" stayOpen>
                     <MDBAccordionItem headerTitle="Patient Information" collapseId="patient">
@@ -128,12 +128,13 @@
                     </MDBAccordionItem>
                 </MDBAccordion>
                 <div class="text-center mt-2">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="width: 100%;">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="width: 100%;" @click="addPatient">Submit</button>
                 </div>
             </div>
 
         </form>
     </div>
+
 </template>
 
 <script>

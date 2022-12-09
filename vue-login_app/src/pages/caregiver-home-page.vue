@@ -41,7 +41,6 @@
                 <td>
                     <p class="fw-normal mb-1">{{ user.phoneNumber }}</p>
                 </td>
-              
             </tr>
         </tbody>
     </table>
