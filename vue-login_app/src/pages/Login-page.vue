@@ -78,6 +78,7 @@ export default {
 
                     localStorage.setItem('email', this.email);
                     localStorage.setItem('role', res.data.role);
+                    localStorage.setItem('name',res.data.fullname);
                     
                     // if the user doesn't have a profile, direct them to the profile page
                     if (res.data.fullname === null) {

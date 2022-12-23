@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS "user";
 
 CREATE TABLE "user"(
     email Varchar2(100) PRIMARY KEY,
-    password Varchar2(100),
+    password Varchar2(100) NOT NULL,
     fullName varchar2(200),
     role varchar2(100),
     profileImage blob,
